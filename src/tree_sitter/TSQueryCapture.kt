@@ -7,7 +7,7 @@ import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.VarHandle
-import kotlin.UInt
+import kotlin.Int
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmInline
 
@@ -22,7 +22,7 @@ public value class TSQueryCapture(
         }
 
     public var index: uint32_t
-        get() = (TSQueryCapture.indexHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSQueryCapture.indexHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSQueryCapture.indexHandle.set(this.`$mem`, value.toInt())
         }

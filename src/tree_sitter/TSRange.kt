@@ -7,7 +7,7 @@ import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.VarHandle
-import kotlin.UInt
+import kotlin.Int
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmInline
 
@@ -28,13 +28,13 @@ public value class TSRange(
         }
 
     public var start_byte: uint32_t
-        get() = (TSRange.start_byteHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSRange.start_byteHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSRange.start_byteHandle.set(this.`$mem`, value.toInt())
         }
 
     public var end_byte: uint32_t
-        get() = (TSRange.end_byteHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSRange.end_byteHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSRange.end_byteHandle.set(this.`$mem`, value.toInt())
         }

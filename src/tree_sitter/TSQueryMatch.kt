@@ -6,8 +6,8 @@ import java.lang.foreign.MemorySegment
 import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.VarHandle
-import kotlin.UInt
-import kotlin.UShort
+import kotlin.Int
+import kotlin.Short
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmInline
 
@@ -16,19 +16,19 @@ public value class TSQueryMatch(
     public val `$mem`: MemorySegment,
 ) {
     public var id: uint32_t
-        get() = (TSQueryMatch.idHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSQueryMatch.idHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSQueryMatch.idHandle.set(this.`$mem`, value.toInt())
         }
 
     public var pattern_index: uint16_t
-        get() = (TSQueryMatch.pattern_indexHandle.get(this.`$mem`) as UShort).toUShort()
+        get() = (TSQueryMatch.pattern_indexHandle.get(this.`$mem`) as Short).toUShort()
         set(`value`) {
             TSQueryMatch.pattern_indexHandle.set(this.`$mem`, value.toShort())
         }
 
     public var capture_count: uint16_t
-        get() = (TSQueryMatch.capture_countHandle.get(this.`$mem`) as UShort).toUShort()
+        get() = (TSQueryMatch.capture_countHandle.get(this.`$mem`) as Short).toUShort()
         set(`value`) {
             TSQueryMatch.capture_countHandle.set(this.`$mem`, value.toShort())
         }

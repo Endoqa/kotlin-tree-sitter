@@ -7,7 +7,6 @@ import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.VarHandle
 import kotlin.Int
-import kotlin.UInt
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmInline
 
@@ -25,7 +24,7 @@ public value class TSQueryPredicateStep(
         }
 
     public var value_id: uint32_t
-        get() = (TSQueryPredicateStep.value_idHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSQueryPredicateStep.value_idHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSQueryPredicateStep.value_idHandle.set(this.`$mem`, value.toInt())
         }

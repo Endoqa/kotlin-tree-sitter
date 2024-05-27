@@ -7,7 +7,7 @@ import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.VarHandle
-import kotlin.UInt
+import kotlin.Int
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmInline
 
@@ -16,19 +16,19 @@ public value class TSInputEdit(
     public val `$mem`: MemorySegment,
 ) {
     public var start_byte: uint32_t
-        get() = (TSInputEdit.start_byteHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSInputEdit.start_byteHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSInputEdit.start_byteHandle.set(this.`$mem`, value.toInt())
         }
 
     public var old_end_byte: uint32_t
-        get() = (TSInputEdit.old_end_byteHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSInputEdit.old_end_byteHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSInputEdit.old_end_byteHandle.set(this.`$mem`, value.toInt())
         }
 
     public var new_end_byte: uint32_t
-        get() = (TSInputEdit.new_end_byteHandle.get(this.`$mem`) as UInt).toUInt()
+        get() = (TSInputEdit.new_end_byteHandle.get(this.`$mem`) as Int).toUInt()
         set(`value`) {
             TSInputEdit.new_end_byteHandle.set(this.`$mem`, value.toInt())
         }
