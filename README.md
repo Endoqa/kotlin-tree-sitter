@@ -19,7 +19,7 @@ val languageMethod = Linker.nativeLinker().downcallHandle(
     FunctionDescriptor.of(ValueLayout.ADDRESS)
 )
 
-val language: Pointer<TSLanguage> = tree_sitter_c_mh.invokeExact() as MemorySegment
+val language: Pointer<TSLanguage> = languageMethod.invokeExact() as MemorySegment
 ```
 
 All api are identical to c api
