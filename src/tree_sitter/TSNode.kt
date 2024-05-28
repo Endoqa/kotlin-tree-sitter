@@ -5,6 +5,7 @@ import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
+import java.lang.invoke.MethodHandle
 import java.lang.invoke.VarHandle
 import kotlin.Unit
 import kotlin.jvm.JvmField
@@ -14,11 +15,8 @@ import kotlin.jvm.JvmInline
 public value class TSNode(
     public val `$mem`: MemorySegment,
 ) {
-    public var context: NativeArray<uint32_t>
-        get() = TSNode.contextHandle.get(this.`$mem`) as MemorySegment
-        set(`value`) {
-            TSNode.contextHandle.set(this.`$mem`, value)
-        }
+    public val context: NativeArray<uint32_t>
+        get() = TSNode.contextHandle.invokeExact(this.`$mem`) as MemorySegment
 
     public var id: Pointer<Unit>
         get() = TSNode.idHandle.get(this.`$mem`) as MemorySegment
@@ -40,8 +38,8 @@ public value class TSNode(
         ).withName("TSNode")
 
         @JvmField
-        public val contextHandle: VarHandle =
-            layout.varHandle(MemoryLayout.PathElement.groupElement("context"))
+        public val contextHandle: MethodHandle =
+            layout.sliceHandle(MemoryLayout.PathElement.groupElement("context"))
 
         @JvmField
         public val idHandle: VarHandle = layout.varHandle(MemoryLayout.PathElement.groupElement("id"))

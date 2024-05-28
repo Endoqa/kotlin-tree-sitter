@@ -5,6 +5,7 @@ import java.lang.foreign.MemoryLayout
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.StructLayout
 import java.lang.foreign.ValueLayout
+import java.lang.invoke.MethodHandle
 import java.lang.invoke.VarHandle
 import kotlin.Unit
 import kotlin.jvm.JvmField
@@ -26,11 +27,8 @@ public value class TSTreeCursor(
             TSTreeCursor.idHandle.set(this.`$mem`, value)
         }
 
-    public var context: NativeArray<uint32_t>
-        get() = TSTreeCursor.contextHandle.get(this.`$mem`) as MemorySegment
-        set(`value`) {
-            TSTreeCursor.contextHandle.set(this.`$mem`, value)
-        }
+    public val context: NativeArray<uint32_t>
+        get() = TSTreeCursor.contextHandle.invokeExact(this.`$mem`) as MemorySegment
 
     public companion object {
         public val layout: StructLayout = MemoryLayout.structLayout(
@@ -48,7 +46,7 @@ public value class TSTreeCursor(
         public val idHandle: VarHandle = layout.varHandle(MemoryLayout.PathElement.groupElement("id"))
 
         @JvmField
-        public val contextHandle: VarHandle =
-            layout.varHandle(MemoryLayout.PathElement.groupElement("context"))
+        public val contextHandle: MethodHandle =
+            layout.sliceHandle(MemoryLayout.PathElement.groupElement("context"))
     }
 }
