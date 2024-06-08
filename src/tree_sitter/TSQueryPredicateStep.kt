@@ -16,17 +16,17 @@ public value class TSQueryPredicateStep(
 ) {
     public var type: TSQueryPredicateStepType
         get() = TSQueryPredicateStepType.fromInt(
-            TSQueryPredicateStep.typeHandle.get(this.`$mem`) as
+            TSQueryPredicateStep.typeHandle.get(this.`$mem`, 0L) as
                 Int
         )
         set(`value`) {
-            TSQueryPredicateStep.typeHandle.set(this.`$mem`, value.value)
+            TSQueryPredicateStep.typeHandle.set(this.`$mem`, 0L, value.value)
         }
 
     public var value_id: uint32_t
-        get() = (TSQueryPredicateStep.value_idHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSQueryPredicateStep.value_idHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSQueryPredicateStep.value_idHandle.set(this.`$mem`, value.toInt())
+            TSQueryPredicateStep.value_idHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public companion object {

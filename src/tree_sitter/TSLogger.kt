@@ -15,9 +15,9 @@ public value class TSLogger(
     public val `$mem`: MemorySegment,
 ) {
     public var payload: Pointer<Unit>
-        get() = TSLogger.payloadHandle.get(this.`$mem`) as MemorySegment
+        get() = TSLogger.payloadHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSLogger.payloadHandle.set(this.`$mem`, value)
+            TSLogger.payloadHandle.set(this.`$mem`, 0L, value)
         }
 
     public var log: Pointer<(
@@ -25,9 +25,9 @@ public value class TSLogger(
         log_type: TSLogType,
         buffer: Pointer<Byte>,
     ) -> Unit>
-        get() = TSLogger.logHandle.get(this.`$mem`) as MemorySegment
+        get() = TSLogger.logHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSLogger.logHandle.set(this.`$mem`, value)
+            TSLogger.logHandle.set(this.`$mem`, 0L, value)
         }
 
     public companion object {

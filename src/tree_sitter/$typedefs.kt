@@ -19,5 +19,3 @@ public typealias TSStateId = uint16_t
 public typealias TSSymbol = uint16_t
 
 public typealias TSFieldId = uint16_t
-
-public typealias TSWasmEngine = wasm_engine_t

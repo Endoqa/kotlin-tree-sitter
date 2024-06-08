@@ -1163,65 +1163,6 @@ internal val `ts_lookahead_iterator_current_symbol_name$mh`: MethodHandle =
         )
     )
 
-internal val `ts_wasm_store_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_wasm_store_new"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_wasm_store_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_wasm_store_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_wasm_store_load_language$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_wasm_store_load_language"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_wasm_store_language_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_wasm_store_language_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_LONG,
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_language_is_wasm$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_is_wasm"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_parser_set_wasm_store$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_set_wasm_store"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-    )
-)
-
-internal val `ts_parser_take_wasm_store$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_take_wasm_store"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-    )
-)
 
 internal val `ts_set_allocator$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
     `$RuntimeHelper`.findSymbol("ts_set_allocator"),

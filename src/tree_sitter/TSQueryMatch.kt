@@ -16,27 +16,27 @@ public value class TSQueryMatch(
     public val `$mem`: MemorySegment,
 ) {
     public var id: uint32_t
-        get() = (TSQueryMatch.idHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSQueryMatch.idHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSQueryMatch.idHandle.set(this.`$mem`, value.toInt())
+            TSQueryMatch.idHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var pattern_index: uint16_t
-        get() = (TSQueryMatch.pattern_indexHandle.get(this.`$mem`) as Short).toUShort()
+        get() = (TSQueryMatch.pattern_indexHandle.get(this.`$mem`, 0L) as Short).toUShort()
         set(`value`) {
-            TSQueryMatch.pattern_indexHandle.set(this.`$mem`, value.toShort())
+            TSQueryMatch.pattern_indexHandle.set(this.`$mem`, 0L, value.toShort())
         }
 
     public var capture_count: uint16_t
-        get() = (TSQueryMatch.capture_countHandle.get(this.`$mem`) as Short).toUShort()
+        get() = (TSQueryMatch.capture_countHandle.get(this.`$mem`, 0L) as Short).toUShort()
         set(`value`) {
-            TSQueryMatch.capture_countHandle.set(this.`$mem`, value.toShort())
+            TSQueryMatch.capture_countHandle.set(this.`$mem`, 0L, value.toShort())
         }
 
     public var captures: Pointer<TSQueryCapture>
-        get() = TSQueryMatch.capturesHandle.get(this.`$mem`) as MemorySegment
+        get() = TSQueryMatch.capturesHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSQueryMatch.capturesHandle.set(this.`$mem`, value)
+            TSQueryMatch.capturesHandle.set(this.`$mem`, 0L, value)
         }
 
     public companion object {

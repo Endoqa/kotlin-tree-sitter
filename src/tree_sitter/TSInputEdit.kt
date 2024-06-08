@@ -16,21 +16,21 @@ public value class TSInputEdit(
     public val `$mem`: MemorySegment,
 ) {
     public var start_byte: uint32_t
-        get() = (TSInputEdit.start_byteHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSInputEdit.start_byteHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSInputEdit.start_byteHandle.set(this.`$mem`, value.toInt())
+            TSInputEdit.start_byteHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var old_end_byte: uint32_t
-        get() = (TSInputEdit.old_end_byteHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSInputEdit.old_end_byteHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSInputEdit.old_end_byteHandle.set(this.`$mem`, value.toInt())
+            TSInputEdit.old_end_byteHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var new_end_byte: uint32_t
-        get() = (TSInputEdit.new_end_byteHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSInputEdit.new_end_byteHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSInputEdit.new_end_byteHandle.set(this.`$mem`, value.toInt())
+            TSInputEdit.new_end_byteHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var start_point: TSPoint

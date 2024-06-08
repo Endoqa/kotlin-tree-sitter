@@ -17,9 +17,9 @@ public value class TSInput(
     public val `$mem`: MemorySegment,
 ) {
     public var payload: Pointer<Unit>
-        get() = TSInput.payloadHandle.get(this.`$mem`) as MemorySegment
+        get() = TSInput.payloadHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSInput.payloadHandle.set(this.`$mem`, value)
+            TSInput.payloadHandle.set(this.`$mem`, 0L, value)
         }
 
     public var read: Pointer<(
@@ -28,15 +28,15 @@ public value class TSInput(
         position: TSPoint,
         bytes_read: Pointer<uint32_t>,
     ) -> Pointer<Byte>>
-        get() = TSInput.readHandle.get(this.`$mem`) as MemorySegment
+        get() = TSInput.readHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSInput.readHandle.set(this.`$mem`, value)
+            TSInput.readHandle.set(this.`$mem`, 0L, value)
         }
 
     public var encoding: TSInputEncoding
-        get() = TSInputEncoding.fromInt(TSInput.encodingHandle.get(this.`$mem`) as Int)
+        get() = TSInputEncoding.fromInt(TSInput.encodingHandle.get(this.`$mem`, 0L) as Int)
         set(`value`) {
-            TSInput.encodingHandle.set(this.`$mem`, value.value)
+            TSInput.encodingHandle.set(this.`$mem`, 0L, value.value)
         }
 
     public companion object {

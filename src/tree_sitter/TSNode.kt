@@ -19,15 +19,15 @@ public value class TSNode(
         get() = TSNode.contextHandle.invokeExact(this.`$mem`) as MemorySegment
 
     public var id: Pointer<Unit>
-        get() = TSNode.idHandle.get(this.`$mem`) as MemorySegment
+        get() = TSNode.idHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSNode.idHandle.set(this.`$mem`, value)
+            TSNode.idHandle.set(this.`$mem`, 0L, value)
         }
 
     public var tree: Pointer<TSTree>
-        get() = TSNode.treeHandle.get(this.`$mem`) as MemorySegment
+        get() = TSNode.treeHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSNode.treeHandle.set(this.`$mem`, value)
+            TSNode.treeHandle.set(this.`$mem`, 0L, value)
         }
 
     public companion object {

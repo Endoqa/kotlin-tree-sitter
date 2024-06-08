@@ -15,15 +15,15 @@ public value class TSPoint(
     public val `$mem`: MemorySegment,
 ) {
     public var row: uint32_t
-        get() = (TSPoint.rowHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSPoint.rowHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSPoint.rowHandle.set(this.`$mem`, value.toInt())
+            TSPoint.rowHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var column: uint32_t
-        get() = (TSPoint.columnHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSPoint.columnHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSPoint.columnHandle.set(this.`$mem`, value.toInt())
+            TSPoint.columnHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public companion object {

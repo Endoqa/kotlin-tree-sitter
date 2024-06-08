@@ -28,15 +28,15 @@ public value class TSRange(
         }
 
     public var start_byte: uint32_t
-        get() = (TSRange.start_byteHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSRange.start_byteHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSRange.start_byteHandle.set(this.`$mem`, value.toInt())
+            TSRange.start_byteHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public var end_byte: uint32_t
-        get() = (TSRange.end_byteHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSRange.end_byteHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSRange.end_byteHandle.set(this.`$mem`, value.toInt())
+            TSRange.end_byteHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public companion object {

@@ -16,15 +16,15 @@ public value class TSTreeCursor(
     public val `$mem`: MemorySegment,
 ) {
     public var tree: Pointer<Unit>
-        get() = TSTreeCursor.treeHandle.get(this.`$mem`) as MemorySegment
+        get() = TSTreeCursor.treeHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSTreeCursor.treeHandle.set(this.`$mem`, value)
+            TSTreeCursor.treeHandle.set(this.`$mem`, 0L, value)
         }
 
     public var id: Pointer<Unit>
-        get() = TSTreeCursor.idHandle.get(this.`$mem`) as MemorySegment
+        get() = TSTreeCursor.idHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            TSTreeCursor.idHandle.set(this.`$mem`, value)
+            TSTreeCursor.idHandle.set(this.`$mem`, 0L, value)
         }
 
     public val context: NativeArray<uint32_t>

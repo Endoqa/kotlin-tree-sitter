@@ -16,15 +16,15 @@ public value class TSQueryCapture(
     public val `$mem`: MemorySegment,
 ) {
     public var node: TSNode
-        get() = TSNode(TSQueryCapture.nodeHandle.invokeExact(this.`$mem`) as MemorySegment)
+        get() = TSNode(TSQueryCapture.nodeHandle.invokeExact(this.`$mem`, 0L) as MemorySegment)
         set(`value`) {
             MemorySegment.copy(value.`$mem`, 0L, this.node.`$mem`, 0L, TSNode.layout.byteSize())
         }
 
     public var index: uint32_t
-        get() = (TSQueryCapture.indexHandle.get(this.`$mem`) as Int).toUInt()
+        get() = (TSQueryCapture.indexHandle.get(this.`$mem`, 0L) as Int).toUInt()
         set(`value`) {
-            TSQueryCapture.indexHandle.set(this.`$mem`, value.toInt())
+            TSQueryCapture.indexHandle.set(this.`$mem`, 0L, value.toInt())
         }
 
     public companion object {
@@ -41,5 +41,16 @@ public value class TSQueryCapture(
         @JvmField
         public val indexHandle: VarHandle =
             layout.varHandle(MemoryLayout.PathElement.groupElement("index"))
+    }
+
+    @JvmInline
+    value class Array(val mem: MemorySegment) {
+
+        constructor(mem: MemorySegment, size: uint32_t) : this(mem.reinterpret(size.toLong() * layout.byteSize()))
+
+        operator fun get(i: uint32_t): TSQueryCapture {
+            return TSQueryCapture(mem.asSlice(i.toLong() * layout.byteSize(), layout.byteSize()))
+        }
+
     }
 }

@@ -637,33 +637,6 @@ public fun ts_lookahead_iterator_current_symbol_name(self: Pointer<TSLookaheadIt
     Pointer<Byte> = `ts_lookahead_iterator_current_symbol_name$mh`.invokeExact(self) as
     MemorySegment
 
-public fun ts_wasm_store_new(engine: Pointer<TSWasmEngine>, error: Pointer<TSWasmError>):
-    Pointer<TSWasmStore> = `ts_wasm_store_new$mh`.invokeExact(engine, error) as MemorySegment
-
-public fun ts_wasm_store_delete(`$p0`: Pointer<TSWasmStore>): Unit =
-    `ts_wasm_store_delete$mh`.invokeExact(`$p0`) as Unit
-
-public fun ts_wasm_store_load_language(
-    `$p0`: Pointer<TSWasmStore>,
-    name: Pointer<Byte>,
-    wasm: Pointer<Byte>,
-    wasm_len: uint32_t,
-    error: Pointer<TSWasmError>,
-): Pointer<TSLanguage> =
-    `ts_wasm_store_load_language$mh`.invokeExact(`$p0`, name, wasm, wasm_len.toInt(), error) as
-        MemorySegment
-
-public fun ts_wasm_store_language_count(`$p0`: Pointer<TSWasmStore>): Long =
-    `ts_wasm_store_language_count$mh`.invokeExact(`$p0`) as Long
-
-public fun ts_language_is_wasm(`$p0`: Pointer<TSLanguage>): Boolean =
-    `ts_language_is_wasm$mh`.invokeExact(`$p0`) as Boolean
-
-public fun ts_parser_set_wasm_store(`$p0`: Pointer<TSParser>, `$p1`: Pointer<TSWasmStore>): Unit =
-    `ts_parser_set_wasm_store$mh`.invokeExact(`$p0`, `$p1`) as Unit
-
-public fun ts_parser_take_wasm_store(`$p0`: Pointer<TSParser>): Pointer<TSWasmStore> =
-    `ts_parser_take_wasm_store$mh`.invokeExact(`$p0`) as MemorySegment
 
 public fun ts_set_allocator(
     new_malloc: Pointer<(`$p0`: Long) -> Pointer<Unit>>,
