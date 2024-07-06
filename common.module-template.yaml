@@ -1,0 +1,6 @@
+settings:
+  jvm:
+    release: 22
+  kotlin:
+      freeCompilerArgs:
+          - -Xcontext-receivers
