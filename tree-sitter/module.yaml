@@ -1,0 +1,12 @@
+product:
+  type: lib
+  platforms:
+    - jvm
+
+
+dependencies:
+  - ../tree_sitter-c
+  
+  
+apply:
+    - ../common.module-template.yaml
