@@ -73,4 +73,17 @@ class Node(
     operator fun get(fieldName: String): Node? {
         return getChildByFieldName(fieldName)
     }
+
+    override fun hashCode(): Int {
+        val id = node.id.address()
+        val tree = node.tree.address()
+        val hash = if (id == tree) id else id xor tree
+        return hash.toInt()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Node) return false
+
+        return ts_node_eq(this.node, other.node)
+    }
 }
