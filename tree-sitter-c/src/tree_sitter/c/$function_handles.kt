@@ -6,6 +6,13 @@ import java.lang.foreign.Linker
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.MethodHandle
 
+internal val `ts_current_free$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
+    `$RuntimeHelper`.findSymbol("ts_current_free"),
+    FunctionDescriptor.ofVoid(
+        `$RuntimeHelper`.POINTER,
+    )
+)
+
 internal val `ts_parser_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
     `$RuntimeHelper`.findSymbol("ts_parser_new"),
     FunctionDescriptor.of(
@@ -1162,14 +1169,3 @@ internal val `ts_lookahead_iterator_current_symbol_name$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
-
-
-internal val `ts_set_allocator$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_set_allocator"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-    )
-)

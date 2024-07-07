@@ -3,12 +3,9 @@ package tree_sitter.c
 
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
-import kotlin.Boolean
-import kotlin.Byte
-import kotlin.Int
-import kotlin.Long
-import kotlin.Short
-import kotlin.Unit
+
+public fun ts_current_free(`$p0`: Pointer<Unit>): Unit = `ts_current_free$mh`.invokeExact(`$p0`) as
+    Unit
 
 public fun ts_parser_new(): Pointer<TSParser> = `ts_parser_new$mh`.invokeExact() as MemorySegment
 
@@ -63,10 +60,10 @@ public fun ts_parser_set_timeout_micros(self: Pointer<TSParser>, timeout_micros:
 public fun ts_parser_timeout_micros(self: Pointer<TSParser>): uint64_t =
     (`ts_parser_timeout_micros$mh`.invokeExact(self) as Long).toULong()
 
-public fun ts_parser_set_cancellation_flag(self: Pointer<TSParser>, flag: Pointer<Long>): Unit =
+public fun ts_parser_set_cancellation_flag(self: Pointer<TSParser>, flag: Pointer<ULong>): Unit =
     `ts_parser_set_cancellation_flag$mh`.invokeExact(self, flag) as Unit
 
-public fun ts_parser_cancellation_flag(self: Pointer<TSParser>): Pointer<Long> =
+public fun ts_parser_cancellation_flag(self: Pointer<TSParser>): Pointer<ULong> =
     `ts_parser_cancellation_flag$mh`.invokeExact(self) as MemorySegment
 
 public fun ts_parser_set_logger(self: Pointer<TSParser>, logger: TSLogger): Unit =
@@ -636,11 +633,3 @@ public fun ts_lookahead_iterator_current_symbol(self: Pointer<TSLookaheadIterato
 public fun ts_lookahead_iterator_current_symbol_name(self: Pointer<TSLookaheadIterator>):
     Pointer<Byte> = `ts_lookahead_iterator_current_symbol_name$mh`.invokeExact(self) as
     MemorySegment
-
-
-public fun ts_set_allocator(
-    new_malloc: Pointer<(`$p0`: Long) -> Pointer<Unit>>,
-    new_calloc: Pointer<(`$p0`: Long, `$p1`: Long) -> Pointer<Unit>>,
-    new_realloc: Pointer<(`$p0`: Pointer<Unit>, `$p1`: Long) -> Pointer<Unit>>,
-    new_free: Pointer<(`$p0`: Pointer<Unit>) -> Unit>,
-): Unit = `ts_set_allocator$mh`.invokeExact(new_malloc, new_calloc, new_realloc, new_free) as Unit
