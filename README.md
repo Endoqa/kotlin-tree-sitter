@@ -2,7 +2,29 @@
 
 Kotlin sdk for [tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 
-## Usage
+## Install
+
+### Add maven repository
+
+```
+https://maven.endoqa.io
+```
+
+### Add dependencies
+
+#### C-style api
+
+```
+io.endoqa:tree-sitter-c:0.0.2
+```
+
+#### Object-style api:
+
+```
+io.endoqa:tree-sitter:0.0.3
+```
+
+## Before Start
 
 ### Load native libraries
 
@@ -10,6 +32,31 @@ Kotlin sdk for [tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 System.load("/absolute/path/to/tree-sitter.*")
 System.load("/absolute/path/to/tree-sitter-<language>.*")
 ```
+
+Pick api style:
+
+- [Kotlin](#get-started)
+- [C-style](#get-started-c-style)
+
+## Get Started
+
+```kotlin
+val parser = Parser()
+val clang = Language.getLanguage("c")
+parser.setLanguage(clang)
+
+val tree = parser.parse(sourceCode)
+val rootNode = tree.rootNode
+rootNode.namedChildren.forEach { node ->
+    println(node.symbol)
+}
+```
+
+## Get Started (C-Style)
+
+All api are identical to c api
+
+[Using Parser - Get Started](https://tree-sitter.github.io/tree-sitter/using-parsers)
 
 ### Obtain a language
 
@@ -22,6 +69,20 @@ val languageMethod = Linker.nativeLinker().downcallHandle(
 val language: Pointer<TSLanguage> = languageMethod.invokeExact() as MemorySegment
 ```
 
-All api are identical to c api
+### Use parser
 
-[Using Parser - Get Started](https://tree-sitter.github.io/tree-sitter/using-parsers)
+```kotlin
+val parser = ts_parser_new()
+ts_parser_set_language(parser, language)
+val source: MemorySegment = TODO("allocate source")
+ts_parser_parse_string(
+    parser,
+    MemorySegment.NULL,
+    source,
+    sourceLen
+)
+val rootNode = ts_tree_root_node(tree)
+ts_tree_delete(tree)
+ts_parser_delete(parser)
+```
+
