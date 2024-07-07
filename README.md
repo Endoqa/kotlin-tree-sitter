@@ -4,6 +4,12 @@ Kotlin sdk for [tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 
 ## Install
 
+### Prepare `tree-sitter` binaries
+
+Prepare binaries with tree-sitter and required languages.
+
+[Optional prebuilt binaries](https://github.com/Endoqa/tree-sitter-prebuilt)
+
 ### Add maven repository
 
 ```
