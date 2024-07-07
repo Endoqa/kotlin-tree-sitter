@@ -5,5 +5,5 @@
 /.fleet
 /gradle.properties
 /gradlew**
-/**gradle**
-/build
+**gradle**
+build
