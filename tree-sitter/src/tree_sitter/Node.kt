@@ -5,7 +5,7 @@ import java.lang.foreign.Arena
 import java.lang.foreign.SegmentAllocator
 
 class Node(
-    val node: TSNode,
+    internal val node: TSNode,
     private val owner: Arena = Arena.ofAuto()
 ) : SegmentAllocator by owner {
 
@@ -26,7 +26,7 @@ class Node(
     val endByte get() = ts_node_end_byte(node)
 
     val childCount get() = ts_node_child_count(node)
-    val namedChildCount get() = ts_node_child_count(node)
+    val namedChildCount get() = ts_node_named_child_count(node)
 
     val desendantCount get() = ts_node_descendant_count(node)
 
