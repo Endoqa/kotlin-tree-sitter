@@ -1,7 +1,7 @@
 package tree_sitter
 
-import tree_sitter.c.TSNode
-import tree_sitter.c.ts_node_is_null
+import lib.tree_sitter.TSNode
+import lib.tree_sitter.ts_node_is_null
 import java.lang.foreign.Arena
 
 internal inline fun <R> tempAllocate(action: Arena.() -> R): R {

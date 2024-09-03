@@ -1,6 +1,6 @@
 package tree_sitter
 
-import tree_sitter.c.*
+import lib.tree_sitter.*
 import java.lang.foreign.Arena
 import java.lang.foreign.SegmentAllocator
 

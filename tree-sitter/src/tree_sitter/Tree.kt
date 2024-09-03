@@ -1,9 +1,9 @@
 package tree_sitter
 
-import tree_sitter.c.Pointer
-import tree_sitter.c.TSTree
-import tree_sitter.c.ts_tree_delete
-import tree_sitter.c.ts_tree_root_node
+import lib.tree_sitter.Pointer
+import lib.tree_sitter.TSTree
+import lib.tree_sitter.ts_tree_delete
+import lib.tree_sitter.ts_tree_root_node
 import java.lang.foreign.Arena
 import java.lang.foreign.SegmentAllocator
 

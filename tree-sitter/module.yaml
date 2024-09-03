@@ -5,7 +5,7 @@ product:
 
 
 dependencies:
-  - ../tree-sitter-c
+  - ../libtree_sitter
   
   
 apply:
