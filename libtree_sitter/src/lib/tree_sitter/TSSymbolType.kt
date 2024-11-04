@@ -11,7 +11,8 @@ public enum class TSSymbolType(
 ) {
     Regular(0),
     Anonymous(1),
-    Auxiliary(2),
+    Supertype(2),
+    Auxiliary(3),
     ;
 
     public companion object {
@@ -33,6 +34,7 @@ public enum class TSSymbolType(
         public fun fromInt(`value`: Int): TSSymbolType = when (value) {
             Regular.value -> Regular
             Anonymous.value -> Anonymous
+            Supertype.value -> Supertype
             Auxiliary.value -> Auxiliary
             else -> error("enum not found")
         }

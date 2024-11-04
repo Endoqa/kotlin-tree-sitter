@@ -6,38 +6,46 @@ import java.lang.foreign.Linker
 import java.lang.foreign.ValueLayout
 import java.lang.invoke.MethodHandle
 
-internal val `ts_parser_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_new"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_new$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_new"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_language$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_language"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_language$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_language"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_set_language$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_set_language"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_set_language$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_set_language"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_set_included_ranges$mh`: MethodHandle =
+internal val `ts_parser_set_included_ranges$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_parser_set_included_ranges"),
         FunctionDescriptor.of(
@@ -47,38 +55,45 @@ internal val `ts_parser_set_included_ranges$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_parser_included_ranges$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_included_ranges"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_included_ranges$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_included_ranges"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_parse$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_parse"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        TSInput.layout,
+internal val `ts_parser_parse$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_parse"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            TSInput.layout,
+        )
     )
-)
+}
 
-internal val `ts_parser_parse_string$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_parse_string"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_parser_parse_string$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_parse_string"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_parser_parse_string_encoding$mh`: MethodHandle =
+internal val `ts_parser_parse_string_encoding$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_parser_parse_string_encoding"),
         FunctionDescriptor.of(
@@ -90,31 +105,38 @@ internal val `ts_parser_parse_string_encoding$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_parser_reset$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_reset"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_reset$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_reset"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_set_timeout_micros$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_set_timeout_micros"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_LONG,
+internal val `ts_parser_set_timeout_micros$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_set_timeout_micros"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_LONG,
+        )
     )
-)
+}
 
-internal val `ts_parser_timeout_micros$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_timeout_micros"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_LONG,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_timeout_micros$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_timeout_micros"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_LONG,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_set_cancellation_flag$mh`: MethodHandle =
+internal val `ts_parser_set_cancellation_flag$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_parser_set_cancellation_flag"),
         FunctionDescriptor.ofVoid(
@@ -122,63 +144,78 @@ internal val `ts_parser_set_cancellation_flag$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_parser_cancellation_flag$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_cancellation_flag"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_cancellation_flag$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_cancellation_flag"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_set_logger$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_set_logger"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        TSLogger.layout,
+internal val `ts_parser_set_logger$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_set_logger"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            TSLogger.layout,
+        )
     )
-)
+}
 
-internal val `ts_parser_logger$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_logger"),
-    FunctionDescriptor.of(
-        TSLogger.layout,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_parser_logger$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_logger"),
+        FunctionDescriptor.of(
+            TSLogger.layout,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_parser_print_dot_graphs$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_parser_print_dot_graphs"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_parser_print_dot_graphs$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_print_dot_graphs"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_tree_copy$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_copy"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_copy$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_copy"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_root_node$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_root_node"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_root_node$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_root_node"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_root_node_with_offset$mh`: MethodHandle =
+internal val `ts_tree_root_node_with_offset$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_root_node_with_offset"),
         FunctionDescriptor.of(
@@ -188,211 +225,262 @@ internal val `ts_tree_root_node_with_offset$mh`: MethodHandle =
             TSPoint.layout,
         )
     )
+}
 
-internal val `ts_tree_language$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_language"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_language$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_language"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_included_ranges$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_included_ranges"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_included_ranges$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_included_ranges"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_edit$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_edit"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_edit$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_edit"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_get_changed_ranges$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_get_changed_ranges"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_get_changed_ranges$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_get_changed_ranges"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_print_dot_graph$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_print_dot_graph"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_tree_print_dot_graph$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_print_dot_graph"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_type$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_type"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_node_type$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_type"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_symbol$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_symbol"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        TSNode.layout,
+internal val `ts_node_symbol$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_symbol"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_language$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_language"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_node_language$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_language"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_grammar_type$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_grammar_type"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_node_grammar_type$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_grammar_type"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_grammar_symbol$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_grammar_symbol"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        TSNode.layout,
+internal val `ts_node_grammar_symbol$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_grammar_symbol"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_start_byte$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_start_byte"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        TSNode.layout,
+internal val `ts_node_start_byte$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_start_byte"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_start_point$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_start_point"),
-    FunctionDescriptor.of(
-        TSPoint.layout,
-        TSNode.layout,
+internal val `ts_node_start_point$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_start_point"),
+        FunctionDescriptor.of(
+            TSPoint.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_end_byte$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_end_byte"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        TSNode.layout,
+internal val `ts_node_end_byte$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_end_byte"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_end_point$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_end_point"),
-    FunctionDescriptor.of(
-        TSPoint.layout,
-        TSNode.layout,
+internal val `ts_node_end_point$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_end_point"),
+        FunctionDescriptor.of(
+            TSPoint.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_string$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_string"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_node_string$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_string"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_is_null$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_is_null"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_is_null$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_is_null"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_is_named$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_is_named"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_is_named$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_is_named"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_is_missing$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_is_missing"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_is_missing$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_is_missing"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_is_extra$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_is_extra"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_is_extra$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_is_extra"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_has_changes$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_has_changes"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_has_changes$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_has_changes"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_has_error$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_has_error"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_has_error$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_has_error"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_is_error$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_is_error"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
+internal val `ts_node_is_error$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_is_error"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_parse_state$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_parse_state"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        TSNode.layout,
+internal val `ts_node_parse_state$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_parse_state"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_next_parse_state$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_next_parse_state"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        TSNode.layout,
+internal val `ts_node_next_parse_state$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_next_parse_state"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_parent$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_parent"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_parent$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_parent"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_child_containing_descendant$mh`: MethodHandle =
+internal val `ts_node_child_containing_descendant$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_child_containing_descendant"),
         FunctionDescriptor.of(
@@ -401,111 +489,158 @@ internal val `ts_node_child_containing_descendant$mh`: MethodHandle =
             TSNode.layout,
         )
     )
+}
 
-internal val `ts_node_child$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_child"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
-        ValueLayout.JAVA_INT,
+internal val `ts_node_child_with_descendant$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_child_with_descendant"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_field_name_for_child$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_field_name_for_child"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
-        ValueLayout.JAVA_INT,
+internal val `ts_node_child$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_child"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_child_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_child_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        TSNode.layout,
+internal val `ts_node_field_name_for_child$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_field_name_for_child"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_named_child$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_named_child"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
-        ValueLayout.JAVA_INT,
+internal val `ts_node_field_name_for_named_child$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_field_name_for_named_child"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_named_child_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_named_child_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        TSNode.layout,
+internal val `ts_node_child_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_child_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_child_by_field_name$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_child_by_field_name"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_node_named_child$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_named_child"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_child_by_field_id$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_child_by_field_id"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_node_named_child_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_named_child_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_next_sibling$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_next_sibling"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_child_by_field_name$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_child_by_field_name"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_node_prev_sibling$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_prev_sibling"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_child_by_field_id$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_child_by_field_id"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_node_next_named_sibling$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_next_named_sibling"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_next_sibling$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_next_sibling"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_prev_named_sibling$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_prev_named_sibling"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_prev_sibling$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_prev_sibling"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_first_child_for_byte$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_first_child_for_byte"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        TSNode.layout,
-        ValueLayout.JAVA_INT,
+internal val `ts_node_next_named_sibling$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_next_named_sibling"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_first_named_child_for_byte$mh`: MethodHandle =
+internal val `ts_node_prev_named_sibling$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_prev_named_sibling"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+        )
+    )
+}
+
+internal val `ts_node_first_child_for_byte$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_first_child_for_byte"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            TSNode.layout,
+            ValueLayout.JAVA_INT,
+        )
+    )
+}
+
+internal val `ts_node_first_named_child_for_byte$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_first_named_child_for_byte"),
         FunctionDescriptor.of(
@@ -514,16 +649,19 @@ internal val `ts_node_first_named_child_for_byte$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_node_descendant_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_descendant_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        TSNode.layout,
+internal val `ts_node_descendant_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_descendant_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_node_descendant_for_byte_range$mh`: MethodHandle =
+internal val `ts_node_descendant_for_byte_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_descendant_for_byte_range"),
         FunctionDescriptor.of(
@@ -533,8 +671,9 @@ internal val `ts_node_descendant_for_byte_range$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_node_descendant_for_point_range$mh`: MethodHandle =
+internal val `ts_node_descendant_for_point_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_descendant_for_point_range"),
         FunctionDescriptor.of(
@@ -544,8 +683,9 @@ internal val `ts_node_descendant_for_point_range$mh`: MethodHandle =
             TSPoint.layout,
         )
     )
+}
 
-internal val `ts_node_named_descendant_for_byte_range$mh`: MethodHandle =
+internal val `ts_node_named_descendant_for_byte_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_named_descendant_for_byte_range"),
         FunctionDescriptor.of(
@@ -555,8 +695,9 @@ internal val `ts_node_named_descendant_for_byte_range$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_node_named_descendant_for_point_range$mh`: MethodHandle =
+internal val `ts_node_named_descendant_for_point_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_named_descendant_for_point_range"),
         FunctionDescriptor.of(
@@ -566,64 +707,79 @@ internal val `ts_node_named_descendant_for_point_range$mh`: MethodHandle =
             TSPoint.layout,
         )
     )
+}
 
-internal val `ts_node_edit$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_edit"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_node_edit$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_edit"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_node_eq$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_node_eq"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        TSNode.layout,
-        TSNode.layout,
+internal val `ts_node_eq$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_node_eq"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            TSNode.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_new"),
-    FunctionDescriptor.of(
-        TSTreeCursor.layout,
-        TSNode.layout,
+internal val `ts_tree_cursor_new$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_new"),
+        FunctionDescriptor.of(
+            TSTreeCursor.layout,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_reset$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_reset"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_tree_cursor_reset$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_reset"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_reset_to$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_reset_to"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_reset_to$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_reset_to"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_current_node$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_node"),
-    FunctionDescriptor.of(
-        TSNode.layout,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_current_node$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_node"),
+        FunctionDescriptor.of(
+            TSNode.layout,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_current_field_name$mh`: MethodHandle =
+internal val `ts_tree_cursor_current_field_name$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_field_name"),
         FunctionDescriptor.of(
@@ -631,8 +787,9 @@ internal val `ts_tree_cursor_current_field_name$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_current_field_id$mh`: MethodHandle =
+internal val `ts_tree_cursor_current_field_id$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_field_id"),
         FunctionDescriptor.of(
@@ -640,16 +797,19 @@ internal val `ts_tree_cursor_current_field_id$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_parent$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_parent"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_goto_parent$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_parent"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_goto_next_sibling$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_next_sibling$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_next_sibling"),
         FunctionDescriptor.of(
@@ -657,8 +817,9 @@ internal val `ts_tree_cursor_goto_next_sibling$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_previous_sibling$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_previous_sibling$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_previous_sibling"),
         FunctionDescriptor.of(
@@ -666,8 +827,9 @@ internal val `ts_tree_cursor_goto_previous_sibling$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_first_child$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_first_child$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_first_child"),
         FunctionDescriptor.of(
@@ -675,8 +837,9 @@ internal val `ts_tree_cursor_goto_first_child$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_last_child$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_last_child$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_last_child"),
         FunctionDescriptor.of(
@@ -684,8 +847,9 @@ internal val `ts_tree_cursor_goto_last_child$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_descendant$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_descendant$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_descendant"),
         FunctionDescriptor.ofVoid(
@@ -693,8 +857,9 @@ internal val `ts_tree_cursor_goto_descendant$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_tree_cursor_current_descendant_index$mh`: MethodHandle =
+internal val `ts_tree_cursor_current_descendant_index$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_descendant_index"),
         FunctionDescriptor.of(
@@ -702,16 +867,19 @@ internal val `ts_tree_cursor_current_descendant_index$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_tree_cursor_current_depth$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_depth"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_current_depth$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_current_depth"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_tree_cursor_goto_first_child_for_byte$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_first_child_for_byte$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_first_child_for_byte"),
         FunctionDescriptor.of(
@@ -720,8 +888,9 @@ internal val `ts_tree_cursor_goto_first_child_for_byte$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_tree_cursor_goto_first_child_for_point$mh`: MethodHandle =
+internal val `ts_tree_cursor_goto_first_child_for_point$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_tree_cursor_goto_first_child_for_point"),
         FunctionDescriptor.of(
@@ -730,59 +899,72 @@ internal val `ts_tree_cursor_goto_first_child_for_point$mh`: MethodHandle =
             TSPoint.layout,
         )
     )
+}
 
-internal val `ts_tree_cursor_copy$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_tree_cursor_copy"),
-    FunctionDescriptor.of(
-        TSTreeCursor.layout,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_tree_cursor_copy$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_tree_cursor_copy"),
+        FunctionDescriptor.of(
+            TSTreeCursor.layout,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_new"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_new$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_new"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_pattern_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_pattern_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_pattern_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_pattern_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_capture_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_capture_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_capture_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_capture_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_string_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_string_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_string_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_string_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_start_byte_for_pattern$mh`: MethodHandle =
+internal val `ts_query_start_byte_for_pattern$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_start_byte_for_pattern"),
         FunctionDescriptor.of(
@@ -791,8 +973,9 @@ internal val `ts_query_start_byte_for_pattern$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_end_byte_for_pattern$mh`: MethodHandle =
+internal val `ts_query_end_byte_for_pattern$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_end_byte_for_pattern"),
         FunctionDescriptor.of(
@@ -801,8 +984,9 @@ internal val `ts_query_end_byte_for_pattern$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_predicates_for_pattern$mh`: MethodHandle =
+internal val `ts_query_predicates_for_pattern$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_predicates_for_pattern"),
         FunctionDescriptor.of(
@@ -812,17 +996,20 @@ internal val `ts_query_predicates_for_pattern$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_query_is_pattern_rooted$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_is_pattern_rooted"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_query_is_pattern_rooted$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_is_pattern_rooted"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_query_is_pattern_non_local$mh`: MethodHandle =
+internal val `ts_query_is_pattern_non_local$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_is_pattern_non_local"),
         FunctionDescriptor.of(
@@ -831,8 +1018,9 @@ internal val `ts_query_is_pattern_non_local$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_is_pattern_guaranteed_at_step$mh`: MethodHandle =
+internal val `ts_query_is_pattern_guaranteed_at_step$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_is_pattern_guaranteed_at_step"),
         FunctionDescriptor.of(
@@ -841,18 +1029,21 @@ internal val `ts_query_is_pattern_guaranteed_at_step$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_capture_name_for_id$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_capture_name_for_id"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_capture_name_for_id$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_capture_name_for_id"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_capture_quantifier_for_id$mh`: MethodHandle =
+internal val `ts_query_capture_quantifier_for_id$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_capture_quantifier_for_id"),
         FunctionDescriptor.of(
@@ -862,58 +1053,71 @@ internal val `ts_query_capture_quantifier_for_id$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_string_value_for_id$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_string_value_for_id"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_string_value_for_id$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_string_value_for_id"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_disable_capture$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_disable_capture"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_query_disable_capture$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_disable_capture"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_query_disable_pattern$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_disable_pattern"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_query_disable_pattern$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_disable_pattern"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_new"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_cursor_new$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_new"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_cursor_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_exec$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_exec"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        TSNode.layout,
+internal val `ts_query_cursor_exec$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_exec"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_did_exceed_match_limit$mh`: MethodHandle =
+internal val `ts_query_cursor_did_exceed_match_limit$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_did_exceed_match_limit"),
         FunctionDescriptor.of(
@@ -921,16 +1125,19 @@ internal val `ts_query_cursor_did_exceed_match_limit$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_query_cursor_match_limit$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_match_limit"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_cursor_match_limit$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_match_limit"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_set_match_limit$mh`: MethodHandle =
+internal val `ts_query_cursor_set_match_limit$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_match_limit"),
         FunctionDescriptor.ofVoid(
@@ -938,8 +1145,29 @@ internal val `ts_query_cursor_set_match_limit$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_cursor_set_byte_range$mh`: MethodHandle =
+internal val `ts_query_cursor_set_timeout_micros$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_set_timeout_micros"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_LONG,
+        )
+    )
+}
+
+internal val `ts_query_cursor_timeout_micros$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_timeout_micros"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_LONG,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
+internal val `ts_query_cursor_set_byte_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_byte_range"),
         FunctionDescriptor.ofVoid(
@@ -948,8 +1176,9 @@ internal val `ts_query_cursor_set_byte_range$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_query_cursor_set_point_range$mh`: MethodHandle =
+internal val `ts_query_cursor_set_point_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_point_range"),
         FunctionDescriptor.ofVoid(
@@ -958,35 +1187,42 @@ internal val `ts_query_cursor_set_point_range$mh`: MethodHandle =
             TSPoint.layout,
         )
     )
+}
 
-internal val `ts_query_cursor_next_match$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_next_match"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_cursor_next_match$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_next_match"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_remove_match$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_remove_match"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
+internal val `ts_query_cursor_remove_match$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_remove_match"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_next_capture$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_query_cursor_next_capture"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_query_cursor_next_capture$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_next_capture"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_query_cursor_set_max_start_depth$mh`: MethodHandle =
+internal val `ts_query_cursor_set_max_start_depth$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_max_start_depth"),
         FunctionDescriptor.ofVoid(
@@ -994,67 +1230,82 @@ internal val `ts_query_cursor_set_max_start_depth$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_language_copy$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_copy"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_copy$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_copy"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_symbol_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_symbol_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_symbol_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_symbol_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_state_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_state_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_state_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_state_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_symbol_name$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_symbol_name"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_language_symbol_name$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_symbol_name"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_language_symbol_for_name$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_symbol_for_name"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_INT,
-        ValueLayout.JAVA_BOOLEAN,
+internal val `ts_language_symbol_for_name$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_symbol_for_name"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_INT,
+            ValueLayout.JAVA_BOOLEAN,
+        )
     )
-)
+}
 
-internal val `ts_language_field_count$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_field_count"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_field_count$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_field_count"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_field_name_for_id$mh`: MethodHandle =
+internal val `ts_language_field_name_for_id$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_language_field_name_for_id"),
         FunctionDescriptor.of(
@@ -1063,8 +1314,9 @@ internal val `ts_language_field_name_for_id$mh`: MethodHandle =
             ValueLayout.JAVA_SHORT,
         )
     )
+}
 
-internal val `ts_language_field_id_for_name$mh`: MethodHandle =
+internal val `ts_language_field_id_for_name$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_language_field_id_for_name"),
         FunctionDescriptor.of(
@@ -1074,51 +1326,62 @@ internal val `ts_language_field_id_for_name$mh`: MethodHandle =
             ValueLayout.JAVA_INT,
         )
     )
+}
 
-internal val `ts_language_symbol_type$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_symbol_type"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_language_symbol_type$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_symbol_type"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_language_version$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_version"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_INT,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_language_version$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_version"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_language_next_state$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_language_next_state"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_SHORT,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_SHORT,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_language_next_state$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_next_state"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_SHORT,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_lookahead_iterator_new$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_new"),
-    FunctionDescriptor.of(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_lookahead_iterator_new$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_new"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_lookahead_iterator_delete$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_delete"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
+internal val `ts_lookahead_iterator_delete$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_delete"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_lookahead_iterator_reset_state$mh`: MethodHandle =
+internal val `ts_lookahead_iterator_reset_state$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_reset_state"),
         FunctionDescriptor.of(
@@ -1127,18 +1390,21 @@ internal val `ts_lookahead_iterator_reset_state$mh`: MethodHandle =
             ValueLayout.JAVA_SHORT,
         )
     )
+}
 
-internal val `ts_lookahead_iterator_reset$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_reset"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        ValueLayout.JAVA_SHORT,
+internal val `ts_lookahead_iterator_reset$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_reset"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+        )
     )
-)
+}
 
-internal val `ts_lookahead_iterator_language$mh`: MethodHandle =
+internal val `ts_lookahead_iterator_language$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_language"),
         FunctionDescriptor.of(
@@ -1146,16 +1412,19 @@ internal val `ts_lookahead_iterator_language$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_lookahead_iterator_next$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_next"),
-    FunctionDescriptor.of(
-        ValueLayout.JAVA_BOOLEAN,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_lookahead_iterator_next$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_next"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}
 
-internal val `ts_lookahead_iterator_current_symbol$mh`: MethodHandle =
+internal val `ts_lookahead_iterator_current_symbol$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_current_symbol"),
         FunctionDescriptor.of(
@@ -1163,8 +1432,9 @@ internal val `ts_lookahead_iterator_current_symbol$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_lookahead_iterator_current_symbol_name$mh`: MethodHandle =
+internal val `ts_lookahead_iterator_current_symbol_name$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_lookahead_iterator_current_symbol_name"),
         FunctionDescriptor.of(
@@ -1172,13 +1442,16 @@ internal val `ts_lookahead_iterator_current_symbol_name$mh`: MethodHandle =
             `$RuntimeHelper`.POINTER,
         )
     )
+}
 
-internal val `ts_set_allocator$mh`: MethodHandle = Linker.nativeLinker().downcallHandle(
-    `$RuntimeHelper`.findSymbol("ts_set_allocator"),
-    FunctionDescriptor.ofVoid(
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
-        `$RuntimeHelper`.POINTER,
+internal val `ts_set_allocator$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_set_allocator"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
     )
-)
+}

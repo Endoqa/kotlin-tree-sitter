@@ -192,6 +192,13 @@ public fun ts_node_child_containing_descendant(self: TSNode, descendant: TSNode)
     )
 
 context(SegmentAllocator)
+public fun ts_node_child_with_descendant(self: TSNode, descendant: TSNode): TSNode =
+    TSNode(
+        `ts_node_child_with_descendant$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, descendant.`$mem`)
+                as MemorySegment
+    )
+
+context(SegmentAllocator)
 public fun ts_node_child(self: TSNode, child_index: UInt): TSNode =
     TSNode(
         `ts_node_child$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, child_index.toInt()) as
@@ -200,6 +207,10 @@ public fun ts_node_child(self: TSNode, child_index: UInt): TSNode =
 
 public fun ts_node_field_name_for_child(self: TSNode, child_index: UInt): Pointer<Byte> =
     `ts_node_field_name_for_child$mh`.invokeExact(self.`$mem`, child_index.toInt()) as MemorySegment
+
+public fun ts_node_field_name_for_named_child(self: TSNode, named_child_index: UInt): Pointer<Byte> =
+    `ts_node_field_name_for_named_child$mh`.invokeExact(self.`$mem`, named_child_index.toInt()) as
+            MemorySegment
 
 public fun ts_node_child_count(self: TSNode): UInt =
     (`ts_node_child_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
@@ -517,6 +528,13 @@ public fun ts_query_cursor_match_limit(self: Pointer<TSQueryCursor>): UInt =
 
 public fun ts_query_cursor_set_match_limit(self: Pointer<TSQueryCursor>, limit: UInt): Unit =
     `ts_query_cursor_set_match_limit$mh`.invokeExact(self, limit.toInt()) as Unit
+
+public fun ts_query_cursor_set_timeout_micros(self: Pointer<TSQueryCursor>, timeout_micros: ULong):
+        Unit = `ts_query_cursor_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as
+        Unit
+
+public fun ts_query_cursor_timeout_micros(self: Pointer<TSQueryCursor>): ULong =
+    (`ts_query_cursor_timeout_micros$mh`.invokeExact(self) as Long).toULong()
 
 public fun ts_query_cursor_set_byte_range(
     self: Pointer<TSQueryCursor>,

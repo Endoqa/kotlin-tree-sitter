@@ -8,7 +8,7 @@ import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
 
 public fun interface ts_current_malloc {
-    public fun invoke(`$p0`: ULong): Pointer<Unit>
+    public fun invoke(size: ULong): Pointer<Unit>
 
     public fun allocate(arena: Arena): MemorySegment =
         Linker.nativeLinker().upcallStub(invokeHandle.bindTo(this), fd, arena)

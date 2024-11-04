@@ -7,10 +7,10 @@ public typealias TSSymbol = UShort
 
 public typealias TSFieldId = UShort
 
-public typealias ts_current_malloc = Pointer<(`$p0`: ULong) -> Pointer<Unit>>
+public typealias ts_current_malloc = Pointer<(size: ULong) -> Pointer<Unit>>
 
-public typealias ts_current_calloc = Pointer<(`$p0`: ULong, `$p1`: ULong) -> Pointer<Unit>>
+public typealias ts_current_calloc = Pointer<(count: ULong, size: ULong) -> Pointer<Unit>>
 
-public typealias ts_current_realloc = Pointer<(`$p0`: Pointer<Unit>, `$p1`: ULong) -> Pointer<Unit>>
+public typealias ts_current_realloc = Pointer<(ptr: Pointer<Unit>, size: ULong) -> Pointer<Unit>>
 
-public typealias ts_current_free = Pointer<(`$p0`: Pointer<Unit>) -> Unit>
+public typealias ts_current_free = Pointer<(ptr: Pointer<Unit>) -> Unit>

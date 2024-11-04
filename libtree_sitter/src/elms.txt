@@ -71,8 +71,10 @@ ts_node_parse_state
 ts_node_next_parse_state
 ts_node_parent
 ts_node_child_containing_descendant
+ts_node_child_with_descendant
 ts_node_child
 ts_node_field_name_for_child
+ts_node_field_name_for_named_child
 ts_node_child_count
 ts_node_named_child
 ts_node_named_child_count
@@ -131,6 +133,8 @@ ts_query_cursor_exec
 ts_query_cursor_did_exceed_match_limit
 ts_query_cursor_match_limit
 ts_query_cursor_set_match_limit
+ts_query_cursor_set_timeout_micros
+ts_query_cursor_timeout_micros
 ts_query_cursor_set_byte_range
 ts_query_cursor_set_point_range
 ts_query_cursor_next_match
