@@ -17,7 +17,6 @@ public value class TSParser(
         ).withName("TSParser")
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSParser =
-            TSParser(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSParser = TSParser(alloc.allocate(layout))
     }
 }

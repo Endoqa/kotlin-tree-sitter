@@ -80,6 +80,19 @@ internal val `ts_parser_parse$mh`: MethodHandle by lazy {
     )
 }
 
+internal val `ts_parser_parse_with_options$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_parser_parse_with_options"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            TSInput.layout,
+            TSParseOptions.layout,
+        )
+    )
+}
+
 internal val `ts_parser_parse_string$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_parser_parse_string"),
@@ -474,17 +487,6 @@ internal val `ts_node_parent$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_node_parent"),
         FunctionDescriptor.of(
-            TSNode.layout,
-            TSNode.layout,
-        )
-    )
-}
-
-internal val `ts_node_child_containing_descendant$mh`: MethodHandle by lazy {
-    Linker.nativeLinker().downcallHandle(
-        `$RuntimeHelper`.findSymbol("ts_node_child_containing_descendant"),
-        FunctionDescriptor.of(
-            TSNode.layout,
             TSNode.layout,
             TSNode.layout,
         )
@@ -1117,6 +1119,18 @@ internal val `ts_query_cursor_exec$mh`: MethodHandle by lazy {
     )
 }
 
+internal val `ts_query_cursor_exec_with_options$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_query_cursor_exec_with_options"),
+        FunctionDescriptor.ofVoid(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            TSNode.layout,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
 internal val `ts_query_cursor_did_exceed_match_limit$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_did_exceed_match_limit"),
@@ -1170,7 +1184,8 @@ internal val `ts_query_cursor_timeout_micros$mh`: MethodHandle by lazy {
 internal val `ts_query_cursor_set_byte_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_byte_range"),
-        FunctionDescriptor.ofVoid(
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
             `$RuntimeHelper`.POINTER,
             ValueLayout.JAVA_INT,
             ValueLayout.JAVA_INT,
@@ -1181,7 +1196,8 @@ internal val `ts_query_cursor_set_byte_range$mh`: MethodHandle by lazy {
 internal val `ts_query_cursor_set_point_range$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_query_cursor_set_point_range"),
-        FunctionDescriptor.ofVoid(
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_BOOLEAN,
             `$RuntimeHelper`.POINTER,
             TSPoint.layout,
             TSPoint.layout,
@@ -1271,17 +1287,6 @@ internal val `ts_language_state_count$mh`: MethodHandle by lazy {
     )
 }
 
-internal val `ts_language_symbol_name$mh`: MethodHandle by lazy {
-    Linker.nativeLinker().downcallHandle(
-        `$RuntimeHelper`.findSymbol("ts_language_symbol_name"),
-        FunctionDescriptor.of(
-            `$RuntimeHelper`.POINTER,
-            `$RuntimeHelper`.POINTER,
-            ValueLayout.JAVA_SHORT,
-        )
-    )
-}
-
 internal val `ts_language_symbol_for_name$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_language_symbol_for_name"),
@@ -1328,6 +1333,40 @@ internal val `ts_language_field_id_for_name$mh`: MethodHandle by lazy {
     )
 }
 
+internal val `ts_language_supertypes$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_supertypes"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
+internal val `ts_language_subtypes$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_subtypes"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
+internal val `ts_language_symbol_name$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_symbol_name"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+            ValueLayout.JAVA_SHORT,
+        )
+    )
+}
+
 internal val `ts_language_symbol_type$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_language_symbol_type"),
@@ -1349,6 +1388,26 @@ internal val `ts_language_version$mh`: MethodHandle by lazy {
     )
 }
 
+internal val `ts_language_abi_version$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_abi_version"),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
+internal val `ts_language_metadata$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_metadata"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
+        )
+    )
+}
+
 internal val `ts_language_next_state$mh`: MethodHandle by lazy {
     Linker.nativeLinker().downcallHandle(
         `$RuntimeHelper`.findSymbol("ts_language_next_state"),
@@ -1357,6 +1416,16 @@ internal val `ts_language_next_state$mh`: MethodHandle by lazy {
             `$RuntimeHelper`.POINTER,
             ValueLayout.JAVA_SHORT,
             ValueLayout.JAVA_SHORT,
+        )
+    )
+}
+
+internal val `ts_language_name$mh`: MethodHandle by lazy {
+    Linker.nativeLinker().downcallHandle(
+        `$RuntimeHelper`.findSymbol("ts_language_name"),
+        FunctionDescriptor.of(
+            `$RuntimeHelper`.POINTER,
+            `$RuntimeHelper`.POINTER,
         )
     )
 }

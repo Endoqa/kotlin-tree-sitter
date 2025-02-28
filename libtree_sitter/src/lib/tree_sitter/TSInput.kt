@@ -33,6 +33,12 @@ public value class TSInput(
             encodingHandle.set(this.`$mem`, 0L, value.value)
         }
 
+    public var decode: DecodeFunction
+        get() = decodeHandle.get(this.`$mem`, 0L) as MemorySegment
+        set(`value`) {
+            decodeHandle.set(this.`$mem`, 0L, value)
+        }
+
     public constructor(gc: Boolean) : this(kotlin.run {
         require(gc) { "Do not call this if gc is not want" }
         Arena.ofAuto().allocate(layout)
@@ -44,6 +50,7 @@ public value class TSInput(
             `$RuntimeHelper`.POINTER.withName("read"),
             ValueLayout.JAVA_INT.withName("encoding"),
             MemoryLayout.paddingLayout(4),
+            `$RuntimeHelper`.POINTER.withName("decode"),
         ).withName("TSInput")
 
         @JvmField
@@ -58,10 +65,15 @@ public value class TSInput(
         public val encodingHandle: VarHandle =
             layout.varHandle(MemoryLayout.PathElement.groupElement("encoding"))
 
+        @JvmField
+        public val decodeHandle: VarHandle =
+            layout.varHandle(MemoryLayout.PathElement.groupElement("decode"))
+
         @JvmStatic
         public fun allocate(alloc: SegmentAllocator): TSInput = TSInput(alloc.allocate(layout))
 
         public fun interface read {
+            @CFunctionInvoke
             public fun invoke(
                 payload: Pointer<Unit>,
                 byte_index: UInt,
@@ -76,7 +88,7 @@ public value class TSInput(
                 @JvmStatic
                 public val invokeHandle: MethodHandle =
                     MethodHandles.lookup().unreflect(read::class.java.methods.find {
-                        it.name == "invoke"
+                        it.getAnnotation(CFunctionInvoke::class.java) != null
                     }
                     )
 

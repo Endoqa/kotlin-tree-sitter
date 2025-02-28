@@ -3,16 +3,20 @@ TSStateId
 TSSymbol
 TSFieldId
 TSLanguage
+TSLanguageMetadata
 TSParser
 TSTree
 TSQuery
 TSQueryCursor
 TSLookaheadIterator
+DecodeFunction
 TSInputEncoding
 TSSymbolType
 TSPoint
 TSRange
 TSInput
+TSParseState
+TSParseOptions
 TSLogType
 TSLogger
 TSInputEdit
@@ -24,6 +28,8 @@ TSQueryMatch
 TSQueryPredicateStepType
 TSQueryPredicateStep
 TSQueryError
+TSQueryCursorState
+TSQueryCursorOptions
 ts_parser_new
 ts_parser_delete
 ts_parser_language
@@ -31,6 +37,7 @@ ts_parser_set_language
 ts_parser_set_included_ranges
 ts_parser_included_ranges
 ts_parser_parse
+ts_parser_parse_with_options
 ts_parser_parse_string
 ts_parser_parse_string_encoding
 ts_parser_reset
@@ -70,7 +77,6 @@ ts_node_is_error
 ts_node_parse_state
 ts_node_next_parse_state
 ts_node_parent
-ts_node_child_containing_descendant
 ts_node_child_with_descendant
 ts_node_child
 ts_node_field_name_for_child
@@ -130,6 +136,7 @@ ts_query_disable_pattern
 ts_query_cursor_new
 ts_query_cursor_delete
 ts_query_cursor_exec
+ts_query_cursor_exec_with_options
 ts_query_cursor_did_exceed_match_limit
 ts_query_cursor_match_limit
 ts_query_cursor_set_match_limit
@@ -145,14 +152,19 @@ ts_language_copy
 ts_language_delete
 ts_language_symbol_count
 ts_language_state_count
-ts_language_symbol_name
 ts_language_symbol_for_name
 ts_language_field_count
 ts_language_field_name_for_id
 ts_language_field_id_for_name
+ts_language_supertypes
+ts_language_subtypes
+ts_language_symbol_name
 ts_language_symbol_type
 ts_language_version
+ts_language_abi_version
+ts_language_metadata
 ts_language_next_state
+ts_language_name
 ts_lookahead_iterator_new
 ts_lookahead_iterator_delete
 ts_lookahead_iterator_reset_state
@@ -162,14 +174,15 @@ ts_lookahead_iterator_next
 ts_lookahead_iterator_current_symbol
 ts_lookahead_iterator_current_symbol_name
 ts_set_allocator
-ts_current_malloc
-ts_current_calloc
-ts_current_realloc
-ts_current_free
+ts_set_allocator_new_malloc
+ts_set_allocator_new_calloc
+ts_set_allocator_new_realloc
+ts_set_allocator_new_free
 
 
 # structs
 TSLanguage
+TSLanguageMetadata
 TSParser
 TSTree
 TSQuery
@@ -178,6 +191,8 @@ TSLookaheadIterator
 TSPoint
 TSRange
 TSInput
+TSParseState
+TSParseOptions
 TSLogger
 TSInputEdit
 TSNode
@@ -185,6 +200,8 @@ TSTreeCursor
 TSQueryCapture
 TSQueryMatch
 TSQueryPredicateStep
+TSQueryCursorState
+TSQueryCursorOptions
 
 
 # enums

@@ -6,8 +6,7 @@ import java.lang.foreign.SegmentAllocator
 
 public fun ts_parser_new(): Pointer<TSParser> = `ts_parser_new$mh`.invokeExact() as MemorySegment
 
-public fun ts_parser_delete(self: Pointer<TSParser>): Unit =
-    `ts_parser_delete$mh`.invokeExact(self) as Unit
+public fun ts_parser_delete(self: Pointer<TSParser>): Unit = `ts_parser_delete$mh`.invokeExact(self) as Unit
 
 public fun ts_parser_language(self: Pointer<TSParser>): Pointer<TSLanguage> =
     `ts_parser_language$mh`.invokeExact(self) as MemorySegment
@@ -21,8 +20,8 @@ public fun ts_parser_set_included_ranges(
     count: UInt,
 ): Boolean = `ts_parser_set_included_ranges$mh`.invokeExact(self, ranges, count.toInt()) as Boolean
 
-public fun ts_parser_included_ranges(self: Pointer<TSParser>, count: Pointer<UInt>):
-        Pointer<TSRange> = `ts_parser_included_ranges$mh`.invokeExact(self, count) as MemorySegment
+public fun ts_parser_included_ranges(self: Pointer<TSParser>, count: Pointer<UInt>): Pointer<TSRange> =
+    `ts_parser_included_ranges$mh`.invokeExact(self, count) as MemorySegment
 
 public fun ts_parser_parse(
     self: Pointer<TSParser>,
@@ -30,13 +29,20 @@ public fun ts_parser_parse(
     input: TSInput,
 ): Pointer<TSTree> = `ts_parser_parse$mh`.invokeExact(self, old_tree, input.`$mem`) as MemorySegment
 
+public fun ts_parser_parse_with_options(
+    self: Pointer<TSParser>,
+    old_tree: Pointer<TSTree>,
+    input: TSInput,
+    parse_options: TSParseOptions,
+): Pointer<TSTree> =
+    `ts_parser_parse_with_options$mh`.invokeExact(self, old_tree, input.`$mem`, parse_options.`$mem`) as MemorySegment
+
 public fun ts_parser_parse_string(
     self: Pointer<TSParser>,
     old_tree: Pointer<TSTree>,
     string: Pointer<Byte>,
     length: UInt,
-): Pointer<TSTree> = `ts_parser_parse_string$mh`.invokeExact(self, old_tree, string, length.toInt())
-        as MemorySegment
+): Pointer<TSTree> = `ts_parser_parse_string$mh`.invokeExact(self, old_tree, string, length.toInt()) as MemorySegment
 
 public fun ts_parser_parse_string_encoding(
     self: Pointer<TSParser>,
@@ -44,12 +50,15 @@ public fun ts_parser_parse_string_encoding(
     string: Pointer<Byte>,
     length: UInt,
     encoding: TSInputEncoding,
-): Pointer<TSTree> =
-    `ts_parser_parse_string_encoding$mh`.invokeExact(self, old_tree, string, length.toInt(), encoding.value)
-            as MemorySegment
+): Pointer<TSTree> = `ts_parser_parse_string_encoding$mh`.invokeExact(
+    self,
+    old_tree,
+    string,
+    length.toInt(),
+    encoding.value,
+) as MemorySegment
 
-public fun ts_parser_reset(self: Pointer<TSParser>): Unit = `ts_parser_reset$mh`.invokeExact(self)
-        as Unit
+public fun ts_parser_reset(self: Pointer<TSParser>): Unit = `ts_parser_reset$mh`.invokeExact(self) as Unit
 
 public fun ts_parser_set_timeout_micros(self: Pointer<TSParser>, timeout_micros: ULong): Unit =
     `ts_parser_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as Unit
@@ -73,11 +82,9 @@ public fun ts_parser_logger(self: Pointer<TSParser>): TSLogger =
 public fun ts_parser_print_dot_graphs(self: Pointer<TSParser>, fd: Int): Unit =
     `ts_parser_print_dot_graphs$mh`.invokeExact(self, fd) as Unit
 
-public fun ts_tree_copy(self: Pointer<TSTree>): Pointer<TSTree> =
-    `ts_tree_copy$mh`.invokeExact(self) as MemorySegment
+public fun ts_tree_copy(self: Pointer<TSTree>): Pointer<TSTree> = `ts_tree_copy$mh`.invokeExact(self) as MemorySegment
 
-public fun ts_tree_delete(self: Pointer<TSTree>): Unit = `ts_tree_delete$mh`.invokeExact(self) as
-        Unit
+public fun ts_tree_delete(self: Pointer<TSTree>): Unit = `ts_tree_delete$mh`.invokeExact(self) as Unit
 
 context(SegmentAllocator)
 public fun ts_tree_root_node(self: Pointer<TSTree>): TSNode =
@@ -88,16 +95,14 @@ public fun ts_tree_root_node_with_offset(
     self: Pointer<TSTree>,
     offset_bytes: UInt,
     offset_extent: TSPoint,
-): TSNode =
-    TSNode(
-        `ts_tree_root_node_with_offset$mh`.invokeExact(
-            this@SegmentAllocator,
-            self,
-            offset_bytes.toInt(),
-            offset_extent.`$mem`,
-        )
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_tree_root_node_with_offset$mh`.invokeExact(
+        this@SegmentAllocator,
+        self,
+        offset_bytes.toInt(),
+        offset_extent.`$mem`,
+    ) as MemorySegment
+)
 
 public fun ts_tree_language(self: Pointer<TSTree>): Pointer<TSLanguage> =
     `ts_tree_language$mh`.invokeExact(self) as MemorySegment
@@ -112,17 +117,14 @@ public fun ts_tree_get_changed_ranges(
     old_tree: Pointer<TSTree>,
     new_tree: Pointer<TSTree>,
     length: Pointer<UInt>,
-): Pointer<TSRange> = `ts_tree_get_changed_ranges$mh`.invokeExact(old_tree, new_tree, length) as
-        MemorySegment
+): Pointer<TSRange> = `ts_tree_get_changed_ranges$mh`.invokeExact(old_tree, new_tree, length) as MemorySegment
 
 public fun ts_tree_print_dot_graph(self: Pointer<TSTree>, file_descriptor: Int): Unit =
     `ts_tree_print_dot_graph$mh`.invokeExact(self, file_descriptor) as Unit
 
-public fun ts_node_type(self: TSNode): Pointer<Byte> = `ts_node_type$mh`.invokeExact(self.`$mem`)
-        as MemorySegment
+public fun ts_node_type(self: TSNode): Pointer<Byte> = `ts_node_type$mh`.invokeExact(self.`$mem`) as MemorySegment
 
-public fun ts_node_symbol(self: TSNode): TSSymbol = (`ts_node_symbol$mh`.invokeExact(self.`$mem`)
-        as Short).toUShort()
+public fun ts_node_symbol(self: TSNode): TSSymbol = (`ts_node_symbol$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
 public fun ts_node_language(self: TSNode): Pointer<TSLanguage> =
     `ts_node_language$mh`.invokeExact(self.`$mem`) as MemorySegment
@@ -133,46 +135,33 @@ public fun ts_node_grammar_type(self: TSNode): Pointer<Byte> =
 public fun ts_node_grammar_symbol(self: TSNode): TSSymbol =
     (`ts_node_grammar_symbol$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
-public fun ts_node_start_byte(self: TSNode): UInt =
-    (`ts_node_start_byte$mh`.invokeExact(self.`$mem`) as Int).toUInt()
+public fun ts_node_start_byte(self: TSNode): UInt = (`ts_node_start_byte$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
 context(SegmentAllocator)
 public fun ts_node_start_point(self: TSNode): TSPoint =
-    TSPoint(
-        `ts_node_start_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as
-                MemorySegment
-    )
+    TSPoint(`ts_node_start_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
-public fun ts_node_end_byte(self: TSNode): UInt = (`ts_node_end_byte$mh`.invokeExact(self.`$mem`)
-        as Int).toUInt()
+public fun ts_node_end_byte(self: TSNode): UInt = (`ts_node_end_byte$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
 context(SegmentAllocator)
 public fun ts_node_end_point(self: TSNode): TSPoint =
     TSPoint(`ts_node_end_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
-public fun ts_node_string(self: TSNode): Pointer<Byte> =
-    `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
+public fun ts_node_string(self: TSNode): Pointer<Byte> = `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
 
-public fun ts_node_is_null(self: TSNode): Boolean = `ts_node_is_null$mh`.invokeExact(self.`$mem`)
-        as Boolean
+public fun ts_node_is_null(self: TSNode): Boolean = `ts_node_is_null$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_is_named(self: TSNode): Boolean = `ts_node_is_named$mh`.invokeExact(self.`$mem`)
-        as Boolean
+public fun ts_node_is_named(self: TSNode): Boolean = `ts_node_is_named$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_is_missing(self: TSNode): Boolean =
-    `ts_node_is_missing$mh`.invokeExact(self.`$mem`) as Boolean
+public fun ts_node_is_missing(self: TSNode): Boolean = `ts_node_is_missing$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_is_extra(self: TSNode): Boolean = `ts_node_is_extra$mh`.invokeExact(self.`$mem`)
-        as Boolean
+public fun ts_node_is_extra(self: TSNode): Boolean = `ts_node_is_extra$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_has_changes(self: TSNode): Boolean =
-    `ts_node_has_changes$mh`.invokeExact(self.`$mem`) as Boolean
+public fun ts_node_has_changes(self: TSNode): Boolean = `ts_node_has_changes$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_has_error(self: TSNode): Boolean =
-    `ts_node_has_error$mh`.invokeExact(self.`$mem`) as Boolean
+public fun ts_node_has_error(self: TSNode): Boolean = `ts_node_has_error$mh`.invokeExact(self.`$mem`) as Boolean
 
-public fun ts_node_is_error(self: TSNode): Boolean = `ts_node_is_error$mh`.invokeExact(self.`$mem`)
-        as Boolean
+public fun ts_node_is_error(self: TSNode): Boolean = `ts_node_is_error$mh`.invokeExact(self.`$mem`) as Boolean
 
 public fun ts_node_parse_state(self: TSNode): TSStateId =
     (`ts_node_parse_state$mh`.invokeExact(self.`$mem`) as Short).toUShort()
@@ -185,42 +174,35 @@ public fun ts_node_parent(self: TSNode): TSNode =
     TSNode(`ts_node_parent$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
 context(SegmentAllocator)
-public fun ts_node_child_containing_descendant(self: TSNode, descendant: TSNode): TSNode =
-    TSNode(
-        `ts_node_child_containing_descendant$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, descendant.`$mem`)
-                as MemorySegment
-    )
-
-context(SegmentAllocator)
-public fun ts_node_child_with_descendant(self: TSNode, descendant: TSNode): TSNode =
-    TSNode(
-        `ts_node_child_with_descendant$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, descendant.`$mem`)
-                as MemorySegment
-    )
+public fun ts_node_child_with_descendant(self: TSNode, descendant: TSNode): TSNode = TSNode(
+    `ts_node_child_with_descendant$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        descendant.`$mem`,
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
 public fun ts_node_child(self: TSNode, child_index: UInt): TSNode =
-    TSNode(
-        `ts_node_child$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, child_index.toInt()) as
-                MemorySegment
-    )
+    TSNode(`ts_node_child$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, child_index.toInt()) as MemorySegment)
 
 public fun ts_node_field_name_for_child(self: TSNode, child_index: UInt): Pointer<Byte> =
     `ts_node_field_name_for_child$mh`.invokeExact(self.`$mem`, child_index.toInt()) as MemorySegment
 
 public fun ts_node_field_name_for_named_child(self: TSNode, named_child_index: UInt): Pointer<Byte> =
-    `ts_node_field_name_for_named_child$mh`.invokeExact(self.`$mem`, named_child_index.toInt()) as
-            MemorySegment
+    `ts_node_field_name_for_named_child$mh`.invokeExact(self.`$mem`, named_child_index.toInt()) as MemorySegment
 
 public fun ts_node_child_count(self: TSNode): UInt =
     (`ts_node_child_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
 context(SegmentAllocator)
-public fun ts_node_named_child(self: TSNode, child_index: UInt): TSNode =
-    TSNode(
-        `ts_node_named_child$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, child_index.toInt())
-                as MemorySegment
-    )
+public fun ts_node_named_child(self: TSNode, child_index: UInt): TSNode = TSNode(
+    `ts_node_named_child$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        child_index.toInt(),
+    ) as MemorySegment
+)
 
 public fun ts_node_named_child_count(self: TSNode): UInt =
     (`ts_node_named_child_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
@@ -230,60 +212,57 @@ public fun ts_node_child_by_field_name(
     self: TSNode,
     name: Pointer<Byte>,
     name_length: UInt,
-): TSNode =
-    TSNode(
-        `ts_node_child_by_field_name$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, name, name_length.toInt())
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_node_child_by_field_name$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        name,
+        name_length.toInt(),
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
-public fun ts_node_child_by_field_id(self: TSNode, field_id: TSFieldId): TSNode =
-    TSNode(
-        `ts_node_child_by_field_id$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, field_id.toShort())
-                as MemorySegment
-    )
+public fun ts_node_child_by_field_id(self: TSNode, field_id: TSFieldId): TSNode = TSNode(
+    `ts_node_child_by_field_id$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        field_id.toShort(),
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
 public fun ts_node_next_sibling(self: TSNode): TSNode =
-    TSNode(
-        `ts_node_next_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as
-                MemorySegment
-    )
+    TSNode(`ts_node_next_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
 context(SegmentAllocator)
 public fun ts_node_prev_sibling(self: TSNode): TSNode =
-    TSNode(
-        `ts_node_prev_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as
-                MemorySegment
-    )
+    TSNode(`ts_node_prev_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
 context(SegmentAllocator)
 public fun ts_node_next_named_sibling(self: TSNode): TSNode =
-    TSNode(
-        `ts_node_next_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as
-                MemorySegment
-    )
+    TSNode(`ts_node_next_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
 context(SegmentAllocator)
 public fun ts_node_prev_named_sibling(self: TSNode): TSNode =
-    TSNode(
-        `ts_node_prev_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as
-                MemorySegment
-    )
+    TSNode(`ts_node_prev_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
 context(SegmentAllocator)
-public fun ts_node_first_child_for_byte(self: TSNode, byte: UInt): TSNode =
-    TSNode(
-        `ts_node_first_child_for_byte$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, byte.toInt())
-                as MemorySegment
-    )
+public fun ts_node_first_child_for_byte(self: TSNode, byte: UInt): TSNode = TSNode(
+    `ts_node_first_child_for_byte$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        byte.toInt(),
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
-public fun ts_node_first_named_child_for_byte(self: TSNode, byte: UInt): TSNode =
-    TSNode(
-        `ts_node_first_named_child_for_byte$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, byte.toInt())
-                as MemorySegment
-    )
+public fun ts_node_first_named_child_for_byte(self: TSNode, byte: UInt): TSNode = TSNode(
+    `ts_node_first_named_child_for_byte$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        byte.toInt(),
+    ) as MemorySegment
+)
 
 public fun ts_node_descendant_count(self: TSNode): UInt =
     (`ts_node_descendant_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
@@ -293,64 +272,56 @@ public fun ts_node_descendant_for_byte_range(
     self: TSNode,
     start: UInt,
     end: UInt,
-): TSNode =
-    TSNode(
-        `ts_node_descendant_for_byte_range$mh`.invokeExact(
-            this@SegmentAllocator,
-            self.`$mem`,
-            start.toInt(),
-            end.toInt(),
-        )
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_node_descendant_for_byte_range$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        start.toInt(),
+        end.toInt(),
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
 public fun ts_node_descendant_for_point_range(
     self: TSNode,
     start: TSPoint,
     end: TSPoint,
-): TSNode =
-    TSNode(
-        `ts_node_descendant_for_point_range$mh`.invokeExact(
-            this@SegmentAllocator,
-            self.`$mem`,
-            start.`$mem`,
-            end.`$mem`,
-        )
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_node_descendant_for_point_range$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        start.`$mem`,
+        end.`$mem`,
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
 public fun ts_node_named_descendant_for_byte_range(
     self: TSNode,
     start: UInt,
     end: UInt,
-): TSNode =
-    TSNode(
-        `ts_node_named_descendant_for_byte_range$mh`.invokeExact(
-            this@SegmentAllocator,
-            self.`$mem`,
-            start.toInt(),
-            end.toInt(),
-        )
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_node_named_descendant_for_byte_range$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        start.toInt(),
+        end.toInt(),
+    ) as MemorySegment
+)
 
 context(SegmentAllocator)
 public fun ts_node_named_descendant_for_point_range(
     self: TSNode,
     start: TSPoint,
     end: TSPoint,
-): TSNode =
-    TSNode(
-        `ts_node_named_descendant_for_point_range$mh`.invokeExact(
-            this@SegmentAllocator,
-            self.`$mem`,
-            start.`$mem`,
-            end.`$mem`,
-        )
-                as MemorySegment
-    )
+): TSNode = TSNode(
+    `ts_node_named_descendant_for_point_range$mh`.invokeExact(
+        this@SegmentAllocator,
+        self.`$mem`,
+        start.`$mem`,
+        end.`$mem`,
+    ) as MemorySegment
+)
 
 public fun ts_node_edit(self: Pointer<TSNode>, edit: Pointer<TSInputEdit>): Unit =
     `ts_node_edit$mh`.invokeExact(self, edit) as Unit
@@ -360,10 +331,7 @@ public fun ts_node_eq(self: TSNode, other: TSNode): Boolean =
 
 context(SegmentAllocator)
 public fun ts_tree_cursor_new(node: TSNode): TSTreeCursor =
-    TSTreeCursor(
-        `ts_tree_cursor_new$mh`.invokeExact(this@SegmentAllocator, node.`$mem`) as
-                MemorySegment
-    )
+    TSTreeCursor(`ts_tree_cursor_new$mh`.invokeExact(this@SegmentAllocator, node.`$mem`) as MemorySegment)
 
 public fun ts_tree_cursor_delete(self: Pointer<TSTreeCursor>): Unit =
     `ts_tree_cursor_delete$mh`.invokeExact(self) as Unit
@@ -376,10 +344,7 @@ public fun ts_tree_cursor_reset_to(dst: Pointer<TSTreeCursor>, src: Pointer<TSTr
 
 context(SegmentAllocator)
 public fun ts_tree_cursor_current_node(self: Pointer<TSTreeCursor>): TSNode =
-    TSNode(
-        `ts_tree_cursor_current_node$mh`.invokeExact(this@SegmentAllocator, self) as
-                MemorySegment
-    )
+    TSNode(`ts_tree_cursor_current_node$mh`.invokeExact(this@SegmentAllocator, self) as MemorySegment)
 
 public fun ts_tree_cursor_current_field_name(self: Pointer<TSTreeCursor>): Pointer<Byte> =
     `ts_tree_cursor_current_field_name$mh`.invokeExact(self) as MemorySegment
@@ -402,9 +367,8 @@ public fun ts_tree_cursor_goto_first_child(self: Pointer<TSTreeCursor>): Boolean
 public fun ts_tree_cursor_goto_last_child(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_last_child$mh`.invokeExact(self) as Boolean
 
-public fun ts_tree_cursor_goto_descendant(self: Pointer<TSTreeCursor>, goal_descendant_index: UInt):
-        Unit = `ts_tree_cursor_goto_descendant$mh`.invokeExact(self, goal_descendant_index.toInt()) as
-        Unit
+public fun ts_tree_cursor_goto_descendant(self: Pointer<TSTreeCursor>, goal_descendant_index: UInt): Unit =
+    `ts_tree_cursor_goto_descendant$mh`.invokeExact(self, goal_descendant_index.toInt()) as Unit
 
 public fun ts_tree_cursor_current_descendant_index(self: Pointer<TSTreeCursor>): UInt =
     (`ts_tree_cursor_current_descendant_index$mh`.invokeExact(self) as Int).toUInt()
@@ -412,22 +376,15 @@ public fun ts_tree_cursor_current_descendant_index(self: Pointer<TSTreeCursor>):
 public fun ts_tree_cursor_current_depth(self: Pointer<TSTreeCursor>): UInt =
     (`ts_tree_cursor_current_depth$mh`.invokeExact(self) as Int).toUInt()
 
-public fun ts_tree_cursor_goto_first_child_for_byte(self: Pointer<TSTreeCursor>, goal_byte: UInt):
-        Long = `ts_tree_cursor_goto_first_child_for_byte$mh`.invokeExact(self, goal_byte.toInt()) as
-        Long
+public fun ts_tree_cursor_goto_first_child_for_byte(self: Pointer<TSTreeCursor>, goal_byte: UInt): Long =
+    `ts_tree_cursor_goto_first_child_for_byte$mh`.invokeExact(self, goal_byte.toInt()) as Long
 
-public fun ts_tree_cursor_goto_first_child_for_point(
-    self: Pointer<TSTreeCursor>,
-    goal_point: TSPoint
-): Long =
+public fun ts_tree_cursor_goto_first_child_for_point(self: Pointer<TSTreeCursor>, goal_point: TSPoint): Long =
     `ts_tree_cursor_goto_first_child_for_point$mh`.invokeExact(self, goal_point.`$mem`) as Long
 
 context(SegmentAllocator)
 public fun ts_tree_cursor_copy(cursor: Pointer<TSTreeCursor>): TSTreeCursor =
-    TSTreeCursor(
-        `ts_tree_cursor_copy$mh`.invokeExact(this@SegmentAllocator, cursor) as
-                MemorySegment
-    )
+    TSTreeCursor(`ts_tree_cursor_copy$mh`.invokeExact(this@SegmentAllocator, cursor) as MemorySegment)
 
 public fun ts_query_new(
     language: Pointer<TSLanguage>,
@@ -436,11 +393,9 @@ public fun ts_query_new(
     error_offset: Pointer<UInt>,
     error_type: Pointer<TSQueryError>,
 ): Pointer<TSQuery> =
-    `ts_query_new$mh`.invokeExact(language, source, source_len.toInt(), error_offset, error_type) as
-            MemorySegment
+    `ts_query_new$mh`.invokeExact(language, source, source_len.toInt(), error_offset, error_type) as MemorySegment
 
-public fun ts_query_delete(self: Pointer<TSQuery>): Unit = `ts_query_delete$mh`.invokeExact(self)
-        as Unit
+public fun ts_query_delete(self: Pointer<TSQuery>): Unit = `ts_query_delete$mh`.invokeExact(self) as Unit
 
 public fun ts_query_pattern_count(self: Pointer<TSQuery>): UInt =
     (`ts_query_pattern_count$mh`.invokeExact(self) as Int).toUInt()
@@ -462,8 +417,7 @@ public fun ts_query_predicates_for_pattern(
     pattern_index: UInt,
     step_count: Pointer<UInt>,
 ): Pointer<TSQueryPredicateStep> =
-    `ts_query_predicates_for_pattern$mh`.invokeExact(self, pattern_index.toInt(), step_count) as
-            MemorySegment
+    `ts_query_predicates_for_pattern$mh`.invokeExact(self, pattern_index.toInt(), step_count) as MemorySegment
 
 public fun ts_query_is_pattern_rooted(self: Pointer<TSQuery>, pattern_index: UInt): Boolean =
     `ts_query_is_pattern_rooted$mh`.invokeExact(self, pattern_index.toInt()) as Boolean
@@ -471,33 +425,32 @@ public fun ts_query_is_pattern_rooted(self: Pointer<TSQuery>, pattern_index: UIn
 public fun ts_query_is_pattern_non_local(self: Pointer<TSQuery>, pattern_index: UInt): Boolean =
     `ts_query_is_pattern_non_local$mh`.invokeExact(self, pattern_index.toInt()) as Boolean
 
-public fun ts_query_is_pattern_guaranteed_at_step(self: Pointer<TSQuery>, byte_offset: UInt):
-        Boolean = `ts_query_is_pattern_guaranteed_at_step$mh`.invokeExact(self, byte_offset.toInt()) as
-        Boolean
+public fun ts_query_is_pattern_guaranteed_at_step(self: Pointer<TSQuery>, byte_offset: UInt): Boolean =
+    `ts_query_is_pattern_guaranteed_at_step$mh`.invokeExact(self, byte_offset.toInt()) as Boolean
 
 public fun ts_query_capture_name_for_id(
     self: Pointer<TSQuery>,
     index: UInt,
     length: Pointer<UInt>,
-): Pointer<Byte> = `ts_query_capture_name_for_id$mh`.invokeExact(self, index.toInt(), length) as
-        MemorySegment
+): Pointer<Byte> = `ts_query_capture_name_for_id$mh`.invokeExact(self, index.toInt(), length) as MemorySegment
 
 public fun ts_query_capture_quantifier_for_id(
     self: Pointer<TSQuery>,
     pattern_index: UInt,
     capture_index: UInt,
-): TSQuantifier =
-    TSQuantifier.fromInt(
-        `ts_query_capture_quantifier_for_id$mh`.invokeExact(self, pattern_index.toInt(), capture_index.toInt())
-                as Int
-    )
+): TSQuantifier = TSQuantifier.fromInt(
+    `ts_query_capture_quantifier_for_id$mh`.invokeExact(
+        self,
+        pattern_index.toInt(),
+        capture_index.toInt(),
+    ) as Int
+)
 
 public fun ts_query_string_value_for_id(
     self: Pointer<TSQuery>,
     index: UInt,
     length: Pointer<UInt>,
-): Pointer<Byte> = `ts_query_string_value_for_id$mh`.invokeExact(self, index.toInt(), length) as
-        MemorySegment
+): Pointer<Byte> = `ts_query_string_value_for_id$mh`.invokeExact(self, index.toInt(), length) as MemorySegment
 
 public fun ts_query_disable_capture(
     self: Pointer<TSQuery>,
@@ -508,8 +461,7 @@ public fun ts_query_disable_capture(
 public fun ts_query_disable_pattern(self: Pointer<TSQuery>, pattern_index: UInt): Unit =
     `ts_query_disable_pattern$mh`.invokeExact(self, pattern_index.toInt()) as Unit
 
-public fun ts_query_cursor_new(): Pointer<TSQueryCursor> = `ts_query_cursor_new$mh`.invokeExact() as
-        MemorySegment
+public fun ts_query_cursor_new(): Pointer<TSQueryCursor> = `ts_query_cursor_new$mh`.invokeExact() as MemorySegment
 
 public fun ts_query_cursor_delete(self: Pointer<TSQueryCursor>): Unit =
     `ts_query_cursor_delete$mh`.invokeExact(self) as Unit
@@ -520,6 +472,13 @@ public fun ts_query_cursor_exec(
     node: TSNode,
 ): Unit = `ts_query_cursor_exec$mh`.invokeExact(self, query, node.`$mem`) as Unit
 
+public fun ts_query_cursor_exec_with_options(
+    self: Pointer<TSQueryCursor>,
+    query: Pointer<TSQuery>,
+    node: TSNode,
+    query_options: Pointer<TSQueryCursorOptions>,
+): Unit = `ts_query_cursor_exec_with_options$mh`.invokeExact(self, query, node.`$mem`, query_options) as Unit
+
 public fun ts_query_cursor_did_exceed_match_limit(self: Pointer<TSQueryCursor>): Boolean =
     `ts_query_cursor_did_exceed_match_limit$mh`.invokeExact(self) as Boolean
 
@@ -529,9 +488,8 @@ public fun ts_query_cursor_match_limit(self: Pointer<TSQueryCursor>): UInt =
 public fun ts_query_cursor_set_match_limit(self: Pointer<TSQueryCursor>, limit: UInt): Unit =
     `ts_query_cursor_set_match_limit$mh`.invokeExact(self, limit.toInt()) as Unit
 
-public fun ts_query_cursor_set_timeout_micros(self: Pointer<TSQueryCursor>, timeout_micros: ULong):
-        Unit = `ts_query_cursor_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as
-        Unit
+public fun ts_query_cursor_set_timeout_micros(self: Pointer<TSQueryCursor>, timeout_micros: ULong): Unit =
+    `ts_query_cursor_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as Unit
 
 public fun ts_query_cursor_timeout_micros(self: Pointer<TSQueryCursor>): ULong =
     (`ts_query_cursor_timeout_micros$mh`.invokeExact(self) as Long).toULong()
@@ -540,19 +498,16 @@ public fun ts_query_cursor_set_byte_range(
     self: Pointer<TSQueryCursor>,
     start_byte: UInt,
     end_byte: UInt,
-): Unit = `ts_query_cursor_set_byte_range$mh`.invokeExact(self, start_byte.toInt(), end_byte.toInt())
-        as Unit
+): Boolean = `ts_query_cursor_set_byte_range$mh`.invokeExact(self, start_byte.toInt(), end_byte.toInt()) as Boolean
 
 public fun ts_query_cursor_set_point_range(
     self: Pointer<TSQueryCursor>,
     start_point: TSPoint,
     end_point: TSPoint,
-): Unit =
-    `ts_query_cursor_set_point_range$mh`.invokeExact(self, start_point.`$mem`, end_point.`$mem`) as
-            Unit
+): Boolean = `ts_query_cursor_set_point_range$mh`.invokeExact(self, start_point.`$mem`, end_point.`$mem`) as Boolean
 
-public fun ts_query_cursor_next_match(self: Pointer<TSQueryCursor>, match: Pointer<TSQueryMatch>):
-        Boolean = `ts_query_cursor_next_match$mh`.invokeExact(self, match) as Boolean
+public fun ts_query_cursor_next_match(self: Pointer<TSQueryCursor>, match: Pointer<TSQueryMatch>): Boolean =
+    `ts_query_cursor_next_match$mh`.invokeExact(self, match) as Boolean
 
 public fun ts_query_cursor_remove_match(self: Pointer<TSQueryCursor>, match_id: UInt): Unit =
     `ts_query_cursor_remove_match$mh`.invokeExact(self, match_id.toInt()) as Unit
@@ -563,15 +518,13 @@ public fun ts_query_cursor_next_capture(
     capture_index: Pointer<UInt>,
 ): Boolean = `ts_query_cursor_next_capture$mh`.invokeExact(self, match, capture_index) as Boolean
 
-public fun ts_query_cursor_set_max_start_depth(self: Pointer<TSQueryCursor>, max_start_depth: UInt):
-        Unit = `ts_query_cursor_set_max_start_depth$mh`.invokeExact(self, max_start_depth.toInt()) as
-        Unit
+public fun ts_query_cursor_set_max_start_depth(self: Pointer<TSQueryCursor>, max_start_depth: UInt): Unit =
+    `ts_query_cursor_set_max_start_depth$mh`.invokeExact(self, max_start_depth.toInt()) as Unit
 
 public fun ts_language_copy(self: Pointer<TSLanguage>): Pointer<TSLanguage> =
     `ts_language_copy$mh`.invokeExact(self) as MemorySegment
 
-public fun ts_language_delete(self: Pointer<TSLanguage>): Unit =
-    `ts_language_delete$mh`.invokeExact(self) as Unit
+public fun ts_language_delete(self: Pointer<TSLanguage>): Unit = `ts_language_delete$mh`.invokeExact(self) as Unit
 
 public fun ts_language_symbol_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_symbol_count$mh`.invokeExact(self) as Int).toUInt()
@@ -579,16 +532,13 @@ public fun ts_language_symbol_count(self: Pointer<TSLanguage>): UInt =
 public fun ts_language_state_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_state_count$mh`.invokeExact(self) as Int).toUInt()
 
-public fun ts_language_symbol_name(self: Pointer<TSLanguage>, symbol: TSSymbol): Pointer<Byte> =
-    `ts_language_symbol_name$mh`.invokeExact(self, symbol.toShort()) as MemorySegment
-
 public fun ts_language_symbol_for_name(
     self: Pointer<TSLanguage>,
     string: Pointer<Byte>,
     length: UInt,
     is_named: Boolean,
-): TSSymbol = (`ts_language_symbol_for_name$mh`.invokeExact(self, string, length.toInt(), is_named) as
-        Short).toUShort()
+): TSSymbol =
+    (`ts_language_symbol_for_name$mh`.invokeExact(self, string, length.toInt(), is_named) as Short).toUShort()
 
 public fun ts_language_field_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_field_count$mh`.invokeExact(self) as Int).toUInt()
@@ -600,8 +550,19 @@ public fun ts_language_field_id_for_name(
     self: Pointer<TSLanguage>,
     name: Pointer<Byte>,
     name_length: UInt,
-): TSFieldId = (`ts_language_field_id_for_name$mh`.invokeExact(self, name, name_length.toInt()) as
-        Short).toUShort()
+): TSFieldId = (`ts_language_field_id_for_name$mh`.invokeExact(self, name, name_length.toInt()) as Short).toUShort()
+
+public fun ts_language_supertypes(self: Pointer<TSLanguage>, length: Pointer<UInt>): Pointer<TSSymbol> =
+    `ts_language_supertypes$mh`.invokeExact(self, length) as MemorySegment
+
+public fun ts_language_subtypes(
+    self: Pointer<TSLanguage>,
+    supertype: TSSymbol,
+    length: Pointer<UInt>,
+): Pointer<TSSymbol> = `ts_language_subtypes$mh`.invokeExact(self, supertype.toShort(), length) as MemorySegment
+
+public fun ts_language_symbol_name(self: Pointer<TSLanguage>, symbol: TSSymbol): Pointer<Byte> =
+    `ts_language_symbol_name$mh`.invokeExact(self, symbol.toShort()) as MemorySegment
 
 public fun ts_language_symbol_type(self: Pointer<TSLanguage>, symbol: TSSymbol): TSSymbolType =
     TSSymbolType.fromInt(`ts_language_symbol_type$mh`.invokeExact(self, symbol.toShort()) as Int)
@@ -609,22 +570,29 @@ public fun ts_language_symbol_type(self: Pointer<TSLanguage>, symbol: TSSymbol):
 public fun ts_language_version(self: Pointer<TSLanguage>): UInt =
     (`ts_language_version$mh`.invokeExact(self) as Int).toUInt()
 
+public fun ts_language_abi_version(self: Pointer<TSLanguage>): UInt =
+    (`ts_language_abi_version$mh`.invokeExact(self) as Int).toUInt()
+
+public fun ts_language_metadata(self: Pointer<TSLanguage>): Pointer<TSLanguageMetadata> =
+    `ts_language_metadata$mh`.invokeExact(self) as MemorySegment
+
 public fun ts_language_next_state(
     self: Pointer<TSLanguage>,
     state: TSStateId,
     symbol: TSSymbol,
-): TSStateId = (`ts_language_next_state$mh`.invokeExact(self, state.toShort(), symbol.toShort()) as
-        Short).toUShort()
+): TSStateId = (`ts_language_next_state$mh`.invokeExact(self, state.toShort(), symbol.toShort()) as Short).toUShort()
 
-public fun ts_lookahead_iterator_new(self: Pointer<TSLanguage>, state: TSStateId):
-        Pointer<TSLookaheadIterator> = `ts_lookahead_iterator_new$mh`.invokeExact(self, state.toShort())
-        as MemorySegment
+public fun ts_language_name(self: Pointer<TSLanguage>): Pointer<Byte> =
+    `ts_language_name$mh`.invokeExact(self) as MemorySegment
+
+public fun ts_lookahead_iterator_new(self: Pointer<TSLanguage>, state: TSStateId): Pointer<TSLookaheadIterator> =
+    `ts_lookahead_iterator_new$mh`.invokeExact(self, state.toShort()) as MemorySegment
 
 public fun ts_lookahead_iterator_delete(self: Pointer<TSLookaheadIterator>): Unit =
     `ts_lookahead_iterator_delete$mh`.invokeExact(self) as Unit
 
-public fun ts_lookahead_iterator_reset_state(self: Pointer<TSLookaheadIterator>, state: TSStateId):
-        Boolean = `ts_lookahead_iterator_reset_state$mh`.invokeExact(self, state.toShort()) as Boolean
+public fun ts_lookahead_iterator_reset_state(self: Pointer<TSLookaheadIterator>, state: TSStateId): Boolean =
+    `ts_lookahead_iterator_reset_state$mh`.invokeExact(self, state.toShort()) as Boolean
 
 public fun ts_lookahead_iterator_reset(
     self: Pointer<TSLookaheadIterator>,
@@ -641,13 +609,12 @@ public fun ts_lookahead_iterator_next(self: Pointer<TSLookaheadIterator>): Boole
 public fun ts_lookahead_iterator_current_symbol(self: Pointer<TSLookaheadIterator>): TSSymbol =
     (`ts_lookahead_iterator_current_symbol$mh`.invokeExact(self) as Short).toUShort()
 
-public fun ts_lookahead_iterator_current_symbol_name(self: Pointer<TSLookaheadIterator>):
-        Pointer<Byte> = `ts_lookahead_iterator_current_symbol_name$mh`.invokeExact(self) as
-        MemorySegment
+public fun ts_lookahead_iterator_current_symbol_name(self: Pointer<TSLookaheadIterator>): Pointer<Byte> =
+    `ts_lookahead_iterator_current_symbol_name$mh`.invokeExact(self) as MemorySegment
 
 public fun ts_set_allocator(
-    new_malloc: Pointer<(`$p0`: ULong) -> Pointer<Unit>>,
-    new_calloc: Pointer<(`$p0`: ULong, `$p1`: ULong) -> Pointer<Unit>>,
-    new_realloc: Pointer<(`$p0`: Pointer<Unit>, `$p1`: ULong) -> Pointer<Unit>>,
-    new_free: Pointer<(`$p0`: Pointer<Unit>) -> Unit>,
+    new_malloc: ts_set_allocator_new_malloc,
+    new_calloc: ts_set_allocator_new_calloc,
+    new_realloc: ts_set_allocator_new_realloc,
+    new_free: ts_set_allocator_new_free,
 ): Unit = `ts_set_allocator$mh`.invokeExact(new_malloc, new_calloc, new_realloc, new_free) as Unit

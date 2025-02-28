@@ -7,7 +7,7 @@ import java.lang.invoke.MethodHandles
 import java.lang.invoke.VarHandle
 
 @JvmInline
-public value class TSLogger(
+public value class TSParseOptions(
     public val `$mem`: MemorySegment,
 ) {
     public var payload: Pointer<Unit>
@@ -16,14 +16,10 @@ public value class TSLogger(
             payloadHandle.set(this.`$mem`, 0L, value)
         }
 
-    public var log: Pointer<(
-        payload: Pointer<Unit>,
-        log_type: TSLogType,
-        buffer: Pointer<Byte>,
-    ) -> Unit>
-        get() = logHandle.get(this.`$mem`, 0L) as MemorySegment
+    public var progress_callback: Pointer<(state: Pointer<TSParseState>) -> Boolean>
+        get() = progress_callbackHandle.get(this.`$mem`, 0L) as MemorySegment
         set(`value`) {
-            logHandle.set(this.`$mem`, 0L, value)
+            progress_callbackHandle.set(this.`$mem`, 0L, value)
         }
 
     public constructor(gc: Boolean) : this(kotlin.run {
@@ -34,26 +30,24 @@ public value class TSLogger(
     public companion object {
         public val layout: StructLayout = MemoryLayout.structLayout(
             `$RuntimeHelper`.POINTER.withName("payload"),
-            `$RuntimeHelper`.POINTER.withName("log"),
-        ).withName("TSLogger")
+            `$RuntimeHelper`.POINTER.withName("progress_callback"),
+        ).withName("TSParseOptions")
 
         @JvmField
         public val payloadHandle: VarHandle =
             layout.varHandle(MemoryLayout.PathElement.groupElement("payload"))
 
         @JvmField
-        public val logHandle: VarHandle = layout.varHandle(MemoryLayout.PathElement.groupElement("log"))
+        public val progress_callbackHandle: VarHandle =
+            layout.varHandle(MemoryLayout.PathElement.groupElement("progress_callback"))
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSLogger = TSLogger(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSParseOptions =
+            TSParseOptions(alloc.allocate(layout))
 
-        public fun interface log {
+        public fun interface progress_callback {
             @CFunctionInvoke
-            public fun invoke(
-                payload: Pointer<Unit>,
-                log_type: TSLogType,
-                buffer: Pointer<Byte>,
-            )
+            public fun invoke(state: Pointer<TSParseState>): Boolean
 
             public fun allocate(arena: Arena): MemorySegment =
                 Linker.nativeLinker().upcallStub(invokeHandle.bindTo(this), fd, arena)
@@ -61,18 +55,14 @@ public value class TSLogger(
             public companion object {
                 @JvmStatic
                 public val invokeHandle: MethodHandle =
-                    MethodHandles.filterArguments(
-                        MethodHandles.lookup().unreflect(log::class.java.methods.find {
-                            it.getAnnotation(CFunctionInvoke::class.java) != null
-                        }
-                        ),
-                        1, null, TSLogType.fromInt, null,
+                    MethodHandles.lookup().unreflect(progress_callback::class.java.methods.find {
+                        it.getAnnotation(CFunctionInvoke::class.java) != null
+                    }
                     )
 
                 @JvmStatic
-                public val fd: FunctionDescriptor = FunctionDescriptor.ofVoid(
-                    `$RuntimeHelper`.POINTER,
-                    ValueLayout.JAVA_INT,
+                public val fd: FunctionDescriptor = FunctionDescriptor.of(
+                    ValueLayout.JAVA_BOOLEAN,
                     `$RuntimeHelper`.POINTER,
                 )
             }

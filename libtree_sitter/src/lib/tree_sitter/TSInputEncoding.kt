@@ -10,7 +10,9 @@ public enum class TSInputEncoding(
     public val `value`: Int,
 ) {
     UTF8(0),
-    UTF16(1),
+    UTF16LE(1),
+    UTF16BE(2),
+    Custom(3),
     ;
 
     public companion object {
@@ -31,7 +33,9 @@ public enum class TSInputEncoding(
         @JvmStatic
         public fun fromInt(`value`: Int): TSInputEncoding = when (value) {
             UTF8.value -> UTF8
-            UTF16.value -> UTF16
+            UTF16LE.value -> UTF16LE
+            UTF16BE.value -> UTF16BE
+            Custom.value -> Custom
             else -> error("enum not found")
         }
     }

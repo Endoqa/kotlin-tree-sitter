@@ -49,7 +49,6 @@ public value class TSTreeCursor(
             layout.sliceHandle(MemoryLayout.PathElement.groupElement("context"))
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSTreeCursor =
-            TSTreeCursor(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSTreeCursor = TSTreeCursor(alloc.allocate(layout))
     }
 }

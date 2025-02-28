@@ -21,7 +21,7 @@ https://maven.endoqa.io
 #### C-style api
 
 ```
-io.endoqa:tree-sitter-c:0.0.2
+io.endoqa:libtree-sitter:0.0.2
 ```
 
 #### Object-style api:

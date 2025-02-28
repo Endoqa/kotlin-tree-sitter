@@ -4,6 +4,9 @@ package lib.tree_sitter
 import java.lang.foreign.*
 import kotlin.jvm.optionals.getOrElse
 
+@Target(AnnotationTarget.FUNCTION)
+public annotation class CFunctionInvoke
+
 public typealias Pointer<T> = MemorySegment
 
 public typealias NativeArray<T> = MemorySegment
@@ -21,12 +24,7 @@ public object `$RuntimeHelper` {
 
     @JvmStatic
     public val POINTER: AddressLayout =
-        ValueLayout.ADDRESS.withTargetLayout(
-            MemoryLayout.sequenceLayout(
-                Long.MAX_VALUE,
-                ValueLayout.JAVA_BYTE
-            )
-        )
+        ValueLayout.ADDRESS.withTargetLayout(MemoryLayout.sequenceLayout(Long.MAX_VALUE, ValueLayout.JAVA_BYTE))
 
     @JvmStatic
     public val symbolLookup: SymbolLookup = SymbolLookup { name ->
@@ -39,7 +37,6 @@ public object `$RuntimeHelper` {
     }
 
     @JvmStatic
-    public fun findSymbol(symbol: String): MemorySegment = symbolLookup.find(symbol).getOrElse {
-        error("unable to find symbol $symbol")
-    }
+    public fun findSymbol(symbol: String): MemorySegment =
+        symbolLookup.find(symbol).getOrElse { error("unable to find symbol $symbol") }
 }

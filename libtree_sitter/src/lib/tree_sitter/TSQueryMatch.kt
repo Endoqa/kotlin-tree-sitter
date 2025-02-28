@@ -61,7 +61,6 @@ public value class TSQueryMatch(
             layout.varHandle(MemoryLayout.PathElement.groupElement("captures"))
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSQueryMatch =
-            TSQueryMatch(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSQueryMatch = TSQueryMatch(alloc.allocate(layout))
     }
 }

@@ -9,10 +9,7 @@ public value class TSQueryPredicateStep(
     public val `$mem`: MemorySegment,
 ) {
     public var type: TSQueryPredicateStepType
-        get() = TSQueryPredicateStepType.fromInt(
-            typeHandle.get(this.`$mem`, 0L) as
-                    Int
-        )
+        get() = TSQueryPredicateStepType.fromInt(typeHandle.get(this.`$mem`, 0L) as Int)
         set(`value`) {
             typeHandle.set(this.`$mem`, 0L, value.value)
         }

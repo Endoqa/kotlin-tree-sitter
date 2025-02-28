@@ -2,13 +2,15 @@
 package lib.tree_sitter.proc
 
 import lib.tree_sitter.`$RuntimeHelper`
+import lib.tree_sitter.CFunctionInvoke
 import lib.tree_sitter.Pointer
 import java.lang.foreign.*
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
 
-public fun interface ts_current_realloc {
-    public fun invoke(ptr: Pointer<Unit>, size: ULong): Pointer<Unit>
+public fun interface ts_set_allocator_new_realloc {
+    @CFunctionInvoke
+    public fun invoke(`$p0`: Pointer<Unit>, `$p1`: ULong): Pointer<Unit>
 
     public fun allocate(arena: Arena): MemorySegment =
         Linker.nativeLinker().upcallStub(invokeHandle.bindTo(this), fd, arena)
@@ -16,8 +18,8 @@ public fun interface ts_current_realloc {
     public companion object {
         @JvmStatic
         public val invokeHandle: MethodHandle =
-            MethodHandles.lookup().unreflect(ts_current_realloc::class.java.methods.find {
-                it.name == "invoke"
+            MethodHandles.lookup().unreflect(ts_set_allocator_new_realloc::class.java.methods.find {
+                it.getAnnotation(CFunctionInvoke::class.java) != null
             }
             )
 

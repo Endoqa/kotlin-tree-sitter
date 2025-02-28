@@ -28,7 +28,7 @@ class Node(
     val childCount get() = ts_node_child_count(node)
     val namedChildCount get() = ts_node_named_child_count(node)
 
-    val desendantCount get() = ts_node_descendant_count(node)
+    val descendantCount get() = ts_node_descendant_count(node)
 
 
     fun getChild(index: UInt): Node? {

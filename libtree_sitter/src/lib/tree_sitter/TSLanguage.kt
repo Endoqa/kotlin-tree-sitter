@@ -17,7 +17,6 @@ public value class TSLanguage(
         ).withName("TSLanguage")
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSLanguage =
-            TSLanguage(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSLanguage = TSLanguage(alloc.allocate(layout))
     }
 }

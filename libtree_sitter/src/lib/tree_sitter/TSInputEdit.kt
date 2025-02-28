@@ -85,7 +85,6 @@ public value class TSInputEdit(
             layout.sliceHandle(MemoryLayout.PathElement.groupElement("new_end_point"))
 
         @JvmStatic
-        public fun allocate(alloc: SegmentAllocator): TSInputEdit =
-            TSInputEdit(alloc.allocate(layout))
+        public fun allocate(alloc: SegmentAllocator): TSInputEdit = TSInputEdit(alloc.allocate(layout))
     }
 }
