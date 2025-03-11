@@ -1,7 +1,6 @@
 package tree_sitter
 
 import lib.tree_sitter.TSInputEdit
-import tree_sitter.Point.Companion.into
 import java.lang.foreign.Arena
 
 data class InputEdit(

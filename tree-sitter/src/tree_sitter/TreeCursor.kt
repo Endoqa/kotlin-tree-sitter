@@ -1,12 +1,10 @@
 package tree_sitter
 
 import lib.tree_sitter.*
-import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
 class TreeCursor(
     val raw: Pointer<TSTreeCursor>,
-    val owner: Arena? = null
 ) {
 
 

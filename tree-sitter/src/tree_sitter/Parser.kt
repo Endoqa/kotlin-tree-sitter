@@ -1,23 +1,25 @@
 package tree_sitter
 
 import lib.tree_sitter.*
-import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
-import java.lang.foreign.SegmentAllocator
 
 class Parser(
-    internal val parser: Pointer<TSParser> = ts_parser_new(),
-    private val owner: Arena = Arena.ofAuto()
-) : SegmentAllocator by owner {
+    internal val parser: Pointer<TSParser>,
+) {
 
-    init {
-        cleaner(this) {
-            ts_parser_delete(parser)
+
+    constructor() : this(ts_parser_new())
+
+    var language: Language? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                ts_parser_set_language(parser, value.language)
+            }
         }
-    }
 
     fun setLanguage(language: Language) {
-        ts_parser_set_language(parser, language.language)
+
     }
 
 
@@ -34,6 +36,21 @@ class Parser(
         }
 
         return Tree(ptr)
+    }
+
+    fun reset() {
+        ts_parser_reset(parser)
+    }
+
+    var timeoutMacros: ULong
+        get() = ts_parser_timeout_micros(parser)
+        set(value) {
+            ts_parser_set_timeout_micros(parser, value)
+        }
+
+
+    fun drop() {
+        ts_parser_delete(parser)
     }
 
 }

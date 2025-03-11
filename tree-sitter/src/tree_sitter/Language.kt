@@ -15,8 +15,7 @@ class Language(
     val abiVersion get() = ts_language_abi_version(language)
 
     val fieldCount get() = ts_language_field_count(language)
-
-    //TODO metadata
+    val metadata get() = LanguageMetadata.from(TSLanguageMetadata(ts_language_metadata(language)))
     val nodeKindCount get() = ts_language_symbol_count(language)
     val parseStateCount get() = ts_language_state_count(language)
 
@@ -94,6 +93,14 @@ class Language(
 
     fun delete() {
         ts_language_delete(language)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return this === other || other is Language && language == other.language
+    }
+
+    override fun hashCode(): Int {
+        return language.hashCode()
     }
 
     companion object {
