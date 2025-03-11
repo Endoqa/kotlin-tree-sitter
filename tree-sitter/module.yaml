@@ -6,7 +6,10 @@ product:
 
 dependencies:
   - ../libtree_sitter
-  
-  
+
+
 apply:
-    - ../common.module-template.yaml
+  - ../common.module-template.yaml
+settings:
+  kotlin:
+    optIns: [ kotlin.ExperimentalUnsignedTypes ]
