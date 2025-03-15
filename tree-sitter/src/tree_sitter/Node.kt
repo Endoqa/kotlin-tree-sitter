@@ -127,7 +127,7 @@ class Node(
         var done = false
 
         return iterator<Node> {
-            if (!done) {
+            while (!done) {
                 while (cursor.fieldID != fieldID) {
                     if (!cursor.gotoNextSibling()) {
                         return@iterator
@@ -140,7 +140,6 @@ class Node(
                 }
                 yield(result)
             }
-            return@iterator
         }
     }
 

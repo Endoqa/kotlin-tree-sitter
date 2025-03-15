@@ -18,10 +18,6 @@ class Parser(
             }
         }
 
-    fun setLanguage(language: Language) {
-
-    }
-
 
     fun parse(source: String, oldTree: Tree? = null): Tree {
         val ptr = tempAllocate {
