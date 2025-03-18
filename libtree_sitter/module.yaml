@@ -3,6 +3,8 @@ product:
   platforms:
     - jvm
 
+apply:
+  - ../common.module-template.yaml
 
 settings:
   jvm:

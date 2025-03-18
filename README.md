@@ -21,13 +21,13 @@ https://maven.endoqa.io
 #### C-style api
 
 ```
-io.endoqa:libtree-sitter:0.0.4
+io.endoqa:libtree_sitter:0.0.7
 ```
 
 #### Object-style api:
 
 ```
-io.endoqa:tree-sitter:0.0.4
+io.endoqa:tree-sitter:0.0.7
 ```
 
 ## Before Start
@@ -53,9 +53,6 @@ parser.setLanguage(clang)
 
 val tree = parser.parse(sourceCode)
 val rootNode = tree.rootNode
-rootNode.namedChildren.forEach { node ->
-    println(node.symbol)
-}
 ```
 
 ## Get Started (C-Style)

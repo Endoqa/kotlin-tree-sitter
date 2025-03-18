@@ -59,7 +59,7 @@ class Language(
     fun idForNodeKind(name: String, named: Boolean): UShort {
         return useTemp { temp ->
             val n = temp.allocateFrom(name)
-            ts_language_symbol_for_name(language, n, n.byteSize().toUInt(), named)
+            ts_language_symbol_for_name(language, n, name.length.toUInt(), named)
         }
     }
 
@@ -83,7 +83,7 @@ class Language(
     fun fieldIDForName(name: String): UShort {
         return unsafe {
             val n = allocateFrom(name)
-            ts_language_field_id_for_name(language, n, n.byteSize().toUInt())
+            ts_language_field_id_for_name(language, n, name.length.toUInt())
         }
     }
 
