@@ -3,14 +3,18 @@ package tree_sitter
 import lib.tree_sitter.*
 import java.lang.foreign.MemorySegment
 
-class Parser(
+public class Parser(
     internal val parser: Pointer<TSParser>,
-) {
+) : Drop {
 
 
-    constructor() : this(ts_parser_new())
+    public constructor(managed: Boolean = false) : this(ts_parser_new()) {
+        if (managed) {
+            autoCleaner(this)
+        }
+    }
 
-    var language: Language? = null
+    public var language: Language? = null
         set(value) {
             field = value
             if (value != null) {
@@ -19,12 +23,12 @@ class Parser(
         }
 
 
-    fun parse(source: String, oldTree: Tree? = null): Tree {
-        val ptr = tempAllocate {
+    public fun parse(source: String, oldTree: Tree? = null): Tree {
+        val ptr = unsafe {
             val s = allocateFrom(source)
             val tree = ts_parser_parse_string(
                 parser,
-                oldTree?.tree ?: MemorySegment.NULL,
+                oldTree?.raw ?: MemorySegment.NULL,
                 s,
                 source.length.toUInt()
             )
@@ -34,18 +38,18 @@ class Parser(
         return Tree(ptr)
     }
 
-    fun reset() {
+    public fun reset() {
         ts_parser_reset(parser)
     }
 
-    var timeoutMacros: ULong
+    public var timeoutMacros: ULong
         get() = ts_parser_timeout_micros(parser)
         set(value) {
             ts_parser_set_timeout_micros(parser, value)
         }
 
 
-    fun drop() {
+    public override fun drop() {
         ts_parser_delete(parser)
     }
 

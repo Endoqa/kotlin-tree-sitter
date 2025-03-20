@@ -147,7 +147,7 @@ context(SegmentAllocator)
 public fun ts_node_end_point(self: TSNode): TSPoint =
     TSPoint(`ts_node_end_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
-public fun ts_node_string(self: TSNode): Pointer<Byte> = `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
+public fun  ts_node_string(self: TSNode): Pointer<Byte> = `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
 
 public fun ts_node_is_null(self: TSNode): Boolean = `ts_node_is_null$mh`.invokeExact(self.`$mem`) as Boolean
 

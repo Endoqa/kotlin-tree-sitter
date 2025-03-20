@@ -1,6 +1,6 @@
 package tree_sitter
 
-data class Range(
+public data class Range(
     val startByte: UInt,
     val endByte: UInt,
     val startPoint: Point,

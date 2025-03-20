@@ -4,17 +4,17 @@ import lib.tree_sitter.*
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
-class TreeCursor(
-    val raw: Pointer<TSTreeCursor>,
-    val owner: Arena? = null // for auto
-) {
+public class TreeCursor(
+    public val raw: Pointer<TSTreeCursor>,
+    public val owner: Arena? = null // for auto
+) : Drop {
 
 
-    val node get() = Node.from { ts_tree_cursor_current_node(raw) } ?: error("Node is null")
+    public val node: Node get() = Node.from { ts_tree_cursor_current_node(raw) } ?: error("Node is null")
 
-    val fieldID get() = ts_tree_cursor_current_field_id(raw)
+    public val fieldID: TSFieldId get() = ts_tree_cursor_current_field_id(raw)
 
-    val fieldName: String?
+    public val fieldName: String?
         get() {
             val ptr = ts_tree_cursor_current_field_name(raw)
             return if (ptr == MemorySegment.NULL) {
@@ -24,38 +24,38 @@ class TreeCursor(
             }
         }
 
-    val depth get() = ts_tree_cursor_current_depth(raw)
-    val descendantIndex get() = ts_tree_cursor_current_descendant_index(raw)
+    public val depth: UInt get() = ts_tree_cursor_current_depth(raw)
+    public val descendantIndex: UInt get() = ts_tree_cursor_current_descendant_index(raw)
 
-    fun gotoFirstChild(): Boolean {
+    public fun gotoFirstChild(): Boolean {
         return ts_tree_cursor_goto_first_child(raw)
     }
 
-    fun gotoLastChild(): Boolean {
+    public fun gotoLastChild(): Boolean {
         return ts_tree_cursor_goto_last_child(raw)
     }
 
-    fun gotoParent(): Boolean {
+    public fun gotoParent(): Boolean {
         return ts_tree_cursor_goto_parent(raw)
     }
 
-    fun gotoNextSibling(): Boolean {
+    public fun gotoNextSibling(): Boolean {
         return ts_tree_cursor_goto_next_sibling(raw)
     }
 
-    fun gotoDescendant(descendantIndex: UInt) {
+    public fun gotoDescendant(descendantIndex: UInt) {
         ts_tree_cursor_goto_descendant(raw, descendantIndex)
     }
 
-    fun gotoPreviousSibling(): Boolean {
+    public fun gotoPreviousSibling(): Boolean {
         return ts_tree_cursor_goto_previous_sibling(raw)
     }
 
-    fun gotoFirstChildForByte(index: UInt): Long {
+    public fun gotoFirstChildForByte(index: UInt): Long {
         return ts_tree_cursor_goto_first_child_for_byte(raw, index)
     }
 
-    fun gotoFirstChildForPoint(point: Point): Long {
+    public fun gotoFirstChildForPoint(point: Point): Long {
         return unsafe {
             val p = TSPoint.allocate(this)
             p.row = point.row
@@ -64,19 +64,19 @@ class TreeCursor(
         }
     }
 
-    fun gotoFirstChildForPoint(point: TSPoint): Long {
+    public fun gotoFirstChildForPoint(point: TSPoint): Long {
         return ts_tree_cursor_goto_first_child_for_point(raw, point)
     }
 
-    fun reset(node: Node) {
+    public fun reset(node: Node) {
         ts_tree_cursor_reset(raw, node.node)
     }
 
-    fun resetTo(cursor: TreeCursor) {
+    public fun resetTo(cursor: TreeCursor) {
         ts_tree_cursor_reset_to(raw, cursor.raw)
     }
 
-    fun drop() {
+    public override fun drop() {
         ts_tree_cursor_delete(raw)
     }
 

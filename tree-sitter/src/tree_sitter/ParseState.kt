@@ -3,9 +3,9 @@ package tree_sitter
 import lib.tree_sitter.TSParseState
 
 @JvmInline
-value class ParseState(val state: TSParseState) {
+public value class ParseState(public val state: TSParseState) {
 
-    val currentByteOffset get() = state.current_byte_offset
-    val hasError get() = state.has_error
+    public val currentByteOffset: UInt get() = state.current_byte_offset
+    public val hasError: Boolean get() = state.has_error
 
 }

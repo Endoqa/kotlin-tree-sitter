@@ -6,23 +6,23 @@ import java.lang.foreign.Linker
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.ValueLayout
 
-class Language(
+public class Language(
     internal val language: Pointer<TSLanguage>,
 ) {
 
 
-    val name get() = ts_language_name(language).getString(0)
-    val abiVersion get() = ts_language_abi_version(language)
+    public val name: String get() = ts_language_name(language).getString(0)
+    public val abiVersion: UInt get() = ts_language_abi_version(language)
 
-    val fieldCount get() = ts_language_field_count(language)
-    val metadata get() = LanguageMetadata.from(TSLanguageMetadata(ts_language_metadata(language)))
-    val nodeKindCount get() = ts_language_symbol_count(language)
-    val parseStateCount get() = ts_language_state_count(language)
+    public val fieldCount: UInt get() = ts_language_field_count(language)
+    public val metadata: LanguageMetadata get() = LanguageMetadata.from(TSLanguageMetadata(ts_language_metadata(language)))
+    public val nodeKindCount: UInt get() = ts_language_symbol_count(language)
+    public val parseStateCount: UInt get() = ts_language_state_count(language)
 
-    val supertypes
+    public val supertypes: UShortArray
         get() : UShortArray {
-            return useTemp { temp ->
-                val length = temp.allocateFrom(ValueLayout.JAVA_INT)
+            return unsafe {
+                val length = allocateFrom(ValueLayout.JAVA_INT)
                 val ptr = ts_language_supertypes(language, length)
 
                 val len = length.getAtIndex(ValueLayout.JAVA_INT, 0)
@@ -36,9 +36,9 @@ class Language(
             }
         }
 
-    fun subtypesForSupertype(supertype: UShort): UShortArray {
-        return useTemp { temp ->
-            val length = temp.allocateFrom(ValueLayout.JAVA_INT)
+    public fun subtypesForSupertype(supertype: UShort): UShortArray {
+        return unsafe {
+            val length = allocateFrom(ValueLayout.JAVA_INT)
             val ptr = ts_language_subtypes(language, supertype, length)
 
             val len = length.getAtIndex(ValueLayout.JAVA_INT, 0)
@@ -52,46 +52,46 @@ class Language(
         }
     }
 
-    fun nodeKindForID(id: UShort): String {
+    public fun nodeKindForID(id: UShort): String {
         return ts_language_symbol_name(language, id).getString(0)
     }
 
-    fun idForNodeKind(name: String, named: Boolean): UShort {
-        return useTemp { temp ->
-            val n = temp.allocateFrom(name)
+    public fun idForNodeKind(name: String, named: Boolean): UShort {
+        return unsafe {
+            val n = allocateFrom(name)
             ts_language_symbol_for_name(language, n, name.length.toUInt(), named)
         }
     }
 
-    fun nodeKindIsNamed(id: UShort): Boolean {
+    public fun nodeKindIsNamed(id: UShort): Boolean {
         return ts_language_symbol_type(language, id) == TSSymbolType.Regular
     }
 
-    fun nodeKindIsVisible(id: UShort): Boolean {
+    public fun nodeKindIsVisible(id: UShort): Boolean {
         return ts_language_symbol_type(language, id).value <= TSSymbolType.Anonymous.value
     }
 
-    fun nodeKindIsSupertype(id: UShort): Boolean {
+    public fun nodeKindIsSupertype(id: UShort): Boolean {
         return ts_language_symbol_type(language, id) == TSSymbolType.Supertype
     }
 
-    fun fieldNameForID(fieldID: UShort): String {
+    public fun fieldNameForID(fieldID: UShort): String {
         return ts_language_field_name_for_id(language, fieldID).getString(0)
     }
 
 
-    fun fieldIDForName(name: String): UShort {
+    public fun fieldIDForName(name: String): UShort {
         return unsafe {
             val n = allocateFrom(name)
             ts_language_field_id_for_name(language, n, name.length.toUInt())
         }
     }
 
-    fun nextState(state: UShort, id: UShort): UShort {
+    public fun nextState(state: UShort, id: UShort): UShort {
         return ts_language_next_state(language, state, id)
     }
 
-    fun delete() {
+    public fun delete() {
         ts_language_delete(language)
     }
 
@@ -103,13 +103,13 @@ class Language(
         return language.hashCode()
     }
 
-    companion object {
+    public companion object {
 
         private val languageMethodDesc = FunctionDescriptor.of(ValueLayout.ADDRESS)
         private val languageCache = hashMapOf<String, Language>()
 
 
-        fun getLanguage(languageId: String): Language {
+        public fun getLanguage(languageId: String): Language {
 
             return languageCache.getOrPut(languageId) {
                 val languageMH = Linker.nativeLinker().downcallHandle(

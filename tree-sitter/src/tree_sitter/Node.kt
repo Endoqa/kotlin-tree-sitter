@@ -1,88 +1,97 @@
 package tree_sitter
 
 import lib.tree_sitter.*
-import tree_sitter.InputEdit.Companion.into
-import java.lang.foreign.Arena
-import java.lang.foreign.MemorySegment
+import java.lang.foreign.*
 
-class Node(
+private val freeFunc = Linker.nativeLinker().downcallHandle(FunctionDescriptor.ofVoid(ValueLayout.ADDRESS))
+
+private val defaultFreeFunction by lazy {
+    val freePtr = SymbolLookup.loaderLookup().find("free")
+    freePtr.get()
+}
+
+
+private fun free(free: MemorySegment, ptr: MemorySegment) {
+    freeFunc.bindTo(free).invokeExact(ptr)
+}
+
+public class Node(
     internal val node: TSNode,
     private val owner: Arena,
 ) {
 
-    val id get() = node.id.address().toULong()
+    public val id: ULong get() = node.id.address().toULong()
 
-    val kindID get() = ts_node_symbol(node)
-    val grammarID get() = ts_node_grammar_symbol(node)
-    val kind get() = ts_node_type(node).getString(0)
-    val grammarName get() = ts_node_grammar_type(node).getString(0)
-    val language get() = Language(ts_node_language(node))
+    public val kindID: TSSymbol get() = ts_node_symbol(node)
+    public val grammarID: TSSymbol get() = ts_node_grammar_symbol(node)
+    public val kind: String get() = ts_node_type(node).getString(0)
+    public val grammarName: String get() = ts_node_grammar_type(node).getString(0)
+    public val language: Language get() = Language(ts_node_language(node))
 
-    val isNamed get() = ts_node_is_named(node)
-    val isExtra get() = ts_node_is_extra(node)
-    val hasChanges get() = ts_node_has_changes(node)
-    val hasError get() = ts_node_has_error(node)
-    val isError get() = ts_node_is_error(node)
-    val parseState get() = ts_node_parse_state(node)
-    val nextParseState get() = ts_node_next_parse_state(node)
-    val isMissing get() = ts_node_is_missing(node)
-
-
-    val startByte get() = ts_node_start_byte(node)
-    val endByte get() = ts_node_end_byte(node)
-    val byteRange get() = startByte..endByte
-
-    val range get() = Range(startByte, endByte, startPosition, endPosition)
-
-    val startPosition get() = tempAllocate { Point(ts_node_start_point(node)) }
-    val endPosition get() = tempAllocate { Point(ts_node_end_point(node)) }
+    public val isNamed: Boolean get() = ts_node_is_named(node)
+    public val isExtra: Boolean get() = ts_node_is_extra(node)
+    public val hasChanges: Boolean get() = ts_node_has_changes(node)
+    public val hasError: Boolean get() = ts_node_has_error(node)
+    public val isError: Boolean get() = ts_node_is_error(node)
+    public val parseState: TSStateId get() = ts_node_parse_state(node)
+    public val nextParseState: TSStateId get() = ts_node_next_parse_state(node)
+    public val isMissing: Boolean get() = ts_node_is_missing(node)
 
 
-    fun getChild(index: UInt): Node? {
-        return isolateOwner { safeNode(ts_node_child(node, index)) { Node(it, this) } }
+    public val startByte: UInt get() = ts_node_start_byte(node)
+    public val endByte: UInt get() = ts_node_end_byte(node)
+    public val byteRange: UIntRange get() = startByte..endByte
+
+    public val range: Range get() = Range(startByte, endByte, startPosition, endPosition)
+
+    public val startPosition: Point get() = unsafe { Point(ts_node_start_point(node)) }
+    public val endPosition: Point get() = unsafe { Point(ts_node_end_point(node)) }
+
+
+    public fun getChild(index: UInt): Node? {
+        return from { ts_node_child(node, index) }
     }
 
-    val childCount get() = ts_node_child_count(node)
+    public val childCount: UInt get() = ts_node_child_count(node)
 
-    fun getNamedChild(index: UInt): Node? {
-        return isolateOwner { safeNode(ts_node_named_child(node, index)) { Node(it, this) } }
+    public fun getNamedChild(index: UInt): Node? {
+        return from { ts_node_named_child(node, index) }
     }
 
-    val namedChildCount get() = ts_node_named_child_count(node)
+    public val namedChildCount: UInt get() = ts_node_named_child_count(node)
 
-    fun getChildByFieldName(name: String): Node? {
-        return isolateOwner {
-            val node = useTemp { temp ->
-                ts_node_child_by_field_name(node, temp.allocateFrom(name), name.length.toUInt())
+    public fun getChildByFieldName(name: String): Node? {
+        return from {
+            useUnsafe { onStack ->
+                ts_node_child_by_field_name(node, onStack.allocateFrom(name), name.length.toUInt())
             }
-            safeNode(node) { Node(it, this) }
         }
     }
 
 
-    fun getChildByFieldID(id: UShort): Node? {
-        return isolateOwner { safeNode(ts_node_child_by_field_id(node, id)) { Node(it, this) } }
+    public fun getChildByFieldID(id: UShort): Node? {
+        return from { ts_node_child_by_field_id(node, id) }
     }
 
-    fun fieldNameForChild(childIndex: UInt): String? {
+    public fun fieldNameForChild(childIndex: UInt): String? {
         val ptr = ts_node_field_name_for_child(node, childIndex)
         return if (ptr == MemorySegment.NULL) null else ptr.getString(0)
     }
 
-    fun fieldNameForNamedChild(nameChildIndex: UInt): String? {
+    public fun fieldNameForNamedChild(nameChildIndex: UInt): String? {
         val ptr = ts_node_field_name_for_named_child(node, nameChildIndex)
         return if (ptr == MemorySegment.NULL) null else ptr.getString(0)
     }
 
 
-    val children: List<Node>
+    public val children: List<Node>
         get() {
             return List(childCount.toInt()) {
                 getChild(it.toUInt()) ?: error("impossible")
             }
         }
 
-    fun children(cursor: TreeCursor): List<Node> {
+    public fun children(cursor: TreeCursor): List<Node> {
         cursor.reset(this)
         cursor.gotoFirstChild()
         return List(childCount.toInt()) {
@@ -92,14 +101,14 @@ class Node(
         }
     }
 
-    val namedChildren: List<Node>
+    public val namedChildren: List<Node>
         get() {
             return List(namedChildCount.toInt()) {
                 getNamedChild(it.toUInt()) ?: error("impossible")
             }
         }
 
-    fun namedChildren(cursor: TreeCursor): List<Node> {
+    public fun namedChildren(cursor: TreeCursor): List<Node> {
         cursor.reset(this)
         cursor.gotoFirstChild()
         return List(namedChildCount.toInt()) {
@@ -114,13 +123,13 @@ class Node(
         }
     }
 
-    fun childrenByFieldName(fieldName: String, cursor: TreeCursor): Iterator<Node> {
+    public fun childrenByFieldName(fieldName: String, cursor: TreeCursor): Iterator<Node> {
         val fieldID = language.fieldIDForName(fieldName)
         return childrenByFieldID(fieldID, cursor)
     }
 
 
-    fun childrenByFieldID(fieldID: UShort, cursor: TreeCursor): Iterator<Node> {
+    public fun childrenByFieldID(fieldID: UShort, cursor: TreeCursor): Iterator<Node> {
         cursor.reset(this)
         cursor.gotoFirstChild()
 
@@ -143,40 +152,40 @@ class Node(
         }
     }
 
-    val parent get() = from { ts_node_parent(node) }
+    public val parent: Node? get() = from { ts_node_parent(node) }
 
-    fun childWithDescendant(descendant: Node): Node? {
+    public fun childWithDescendant(descendant: Node): Node? {
         return from { ts_node_child_with_descendant(node, descendant.node) }
     }
 
-    val nextSibling get() = from { ts_node_next_sibling(node) }
-    val prevSibling get() = from { ts_node_prev_sibling(node) }
+    public val nextSibling: Node? get() = from { ts_node_next_sibling(node) }
+    public val prevSibling: Node? get() = from { ts_node_prev_sibling(node) }
 
-    val nextNamedSibling get() = from { ts_node_next_named_sibling(node) }
-    val prevNamedSibling get() = from { ts_node_prev_named_sibling(node) }
+    public val nextNamedSibling: Node? get() = from { ts_node_next_named_sibling(node) }
+    public val prevNamedSibling: Node? get() = from { ts_node_prev_named_sibling(node) }
 
 
-    fun firstChildForByte(byte: UInt): Node? {
+    public fun firstChildForByte(byte: UInt): Node? {
         return from { ts_node_first_child_for_byte(node, byte) }
     }
 
-    fun firstNamedChildForByte(byte: UInt): Node? {
+    public fun firstNamedChildForByte(byte: UInt): Node? {
         return from { ts_node_first_named_child_for_byte(node, byte) }
     }
 
 
-    val descendantCount get() = ts_node_descendant_count(node)
+    public val descendantCount: UInt get() = ts_node_descendant_count(node)
 
-    fun descendantForByteRange(startByte: UInt, endByte: UInt): Node? {
+    public fun descendantForByteRange(startByte: UInt, endByte: UInt): Node? {
         return from { ts_node_descendant_for_byte_range(node, startByte, endByte) }
     }
 
-    fun namedDescendantForByteRange(startByte: UInt, endByte: UInt): Node? {
+    public fun namedDescendantForByteRange(startByte: UInt, endByte: UInt): Node? {
         return from { ts_node_named_descendant_for_byte_range(node, startByte, endByte) }
     }
 
-    fun descendantForPointRange(start: Point, end: Point): Node? {
-        return tempAllocate {
+    public fun descendantForPointRange(start: Point, end: Point): Node? {
+        return unsafe {
             val s = start.into()
             val e = end.into()
 
@@ -185,38 +194,38 @@ class Node(
     }
 
 
-    fun namedDescendantForPointRange(start: Point, end: Point): Node? {
-        return tempAllocate {
+    public fun namedDescendantForPointRange(start: Point, end: Point): Node? {
+        return unsafe {
             val s = start.into()
             val e = end.into()
             from { ts_node_named_descendant_for_point_range(node, s, e) }
         }
     }
 
-    fun toSExp(): String {
+    public fun toSExp(freeFunc: MemorySegment = defaultFreeFunction): String {
         val cString = ts_node_string(node)
         val result = cString.getString(0)
-        TODO("free cString")
+        free(freeFunc, cString)
         return result
     }
 
-    fun walk(): TreeCursor {
-        return isolateOwner {
+    public fun walk(): TreeCursor {
+        return autoDrop {
             val cursor = ts_tree_cursor_new(node)
             TreeCursor(cursor.`$mem`, owner)
         }
     }
 
 
-    fun edit(edit: InputEdit) {
-        tempAllocate {
+    public fun edit(edit: InputEdit) {
+        unsafe {
             val e = edit.into()
             ts_node_edit(node.`$mem`, e.`$mem`)
         }
     }
 
     // extensions
-    operator fun get(fieldName: String): Node? {
+    public operator fun get(fieldName: String): Node? {
         return getChildByFieldName(fieldName)
     }
 
@@ -233,11 +242,20 @@ class Node(
         return ts_node_eq(this.node, other.node)
     }
 
-    companion object {
-        fun from(action: Arena.() -> TSNode): Node? {
-            return isolateOwner {
+    public companion object {
+        /**
+         * Create a node with its lifecycle bind to a separate [Node.owner]
+         *
+         * @param [action] a function takes a context [Node.owner], the [Arena] is same as the new [Node.owner].
+         * If the function returns a [TSNode] [ts_node_is_null], the lifecycle will be end right away.
+         *
+         * @return A [Node] with its own lifecycle.
+         */
+        public fun from(action: Arena.() -> TSNode): Node? {
+            return managedMemory {
                 val node = action()
                 if (ts_node_is_null(node)) {
+                    this.close()
                     null
                 } else {
                     Node(node, this)
