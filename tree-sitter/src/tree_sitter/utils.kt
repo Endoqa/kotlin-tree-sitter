@@ -1,7 +1,5 @@
 package tree_sitter
 
-import jdk.internal.foreign.MemorySessionImpl
-import jdk.internal.ref.CleanerFactory
 import java.lang.foreign.Arena
 
 
@@ -9,14 +7,21 @@ internal inline fun <R> managedMemory(action: Arena.() -> R): R {
     return action(Arena.ofAuto())
 }
 
-internal inline fun <R : Drop> autoDrop(action: Arena.() -> R): R {
-    val session = MemorySessionImpl.createImplicit(CleanerFactory.cleaner())
-    val arena = session.asArena()
-    val droppable = action(arena)
 
-    session.addCloseAction {
+public class ManagedArena(
+    private val arena: Arena,
+) : Arena by arena {
+    public lateinit var droppable: Drop
+    override fun close() {
         droppable.drop()
+        arena.close()
     }
+}
+
+internal inline fun <R : Drop> autoDrop(action: Arena.() -> R): R {
+    val arena = ManagedArena(Arena.ofAuto())
+    val droppable = action(arena)
+    arena.droppable = droppable
 
     return droppable
 }
