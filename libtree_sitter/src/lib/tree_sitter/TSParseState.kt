@@ -21,7 +21,7 @@ public value class TSParseState(
         }
 
     public var has_error: Boolean
-        get() = has_error
+        get() = has_errorHandle.get(this.`$mem`, 0L) as Boolean
         set(`value`) {
             has_errorHandle.set(this.`$mem`, 0L, value)
         }
@@ -36,7 +36,7 @@ public value class TSParseState(
             `$RuntimeHelper`.POINTER.withName("payload"),
             ValueLayout.JAVA_INT.withName("current_byte_offset"),
             ValueLayout.JAVA_BOOLEAN.withName("has_error"),
-            MemoryLayout.paddingLayout(3),
+            MemoryLayout.paddingLayout(5),
         ).withName("TSParseState")
 
         @JvmField

@@ -4,31 +4,139 @@ package lib.tree_sitter
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SegmentAllocator
 
+/**
+ *
+ * Create a new parser.
+ */
 public fun ts_parser_new(): Pointer<TSParser> = `ts_parser_new$mh`.invokeExact() as MemorySegment
 
+/**
+ *
+ * Delete the parser, freeing all of the memory that it used.
+ */
 public fun ts_parser_delete(self: Pointer<TSParser>): Unit = `ts_parser_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Get the parser's current language.
+ */
 public fun ts_parser_language(self: Pointer<TSParser>): Pointer<TSLanguage> =
     `ts_parser_language$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Set the language that the parser should use for parsing.
+ *
+ * Returns a boolean indicating whether or not the language was successfully
+ * assigned. True means assignment succeeded. False means there was a version
+ * mismatch: the language was generated with an incompatible version of the
+ * Tree-sitter CLI. Check the language's ABI version using [`ts_language_abi_version`]
+ * and compare it to this library's [`TREE_SITTER_LANGUAGE_VERSION`] and
+ * [`TREE_SITTER_MIN_COMPATIBLE_LANGUAGE_VERSION`] constants.
+ */
 public fun ts_parser_set_language(self: Pointer<TSParser>, language: Pointer<TSLanguage>): Boolean =
     `ts_parser_set_language$mh`.invokeExact(self, language) as Boolean
 
+/**
+ *
+ * Set the ranges of text that the parser should include when parsing.
+ *
+ * By default, the parser will always include entire documents. This function
+ * allows you to parse only a *portion* of a document but still return a syntax
+ * tree whose ranges match up with the document as a whole. You can also pass
+ * multiple disjoint ranges.
+ *
+ * The second and third parameters specify the location and length of an array
+ * of ranges. The parser does *not* take ownership of these ranges; it copies
+ * the data, so it doesn't matter how these ranges are allocated.
+ *
+ * If `count` is zero, then the entire document will be parsed. Otherwise,
+ * the given ranges must be ordered from earliest to latest in the document,
+ * and they must not overlap. That is, the following must hold for all:
+ *
+ * `i < count - 1`: `ranges[i].end_byte <= ranges[i + 1].start_byte`
+ *
+ * If this requirement is not satisfied, the operation will fail, the ranges
+ * will not be assigned, and this function will return `false`. On success,
+ * this function returns `true`
+ */
 public fun ts_parser_set_included_ranges(
     self: Pointer<TSParser>,
     ranges: Pointer<TSRange>,
     count: UInt,
 ): Boolean = `ts_parser_set_included_ranges$mh`.invokeExact(self, ranges, count.toInt()) as Boolean
 
+/**
+ *
+ * Get the ranges of text that the parser will include when parsing.
+ *
+ * The returned pointer is owned by the parser. The caller should not free it
+ * or write to it. The length of the array will be written to the given
+ * `count` pointer.
+ */
 public fun ts_parser_included_ranges(self: Pointer<TSParser>, count: Pointer<UInt>): Pointer<TSRange> =
     `ts_parser_included_ranges$mh`.invokeExact(self, count) as MemorySegment
 
+/**
+ *
+ * Use the parser to parse some source code and create a syntax tree.
+ *
+ * If you are parsing this document for the first time, pass `NULL` for the
+ * `old_tree` parameter. Otherwise, if you have already parsed an earlier
+ * version of this document and the document has since been edited, pass the
+ * previous syntax tree so that the unchanged parts of it can be reused.
+ * This will save time and memory. For this to work correctly, you must have
+ * already edited the old syntax tree using the [`ts_tree_edit`] function in a
+ * way that exactly matches the source code changes.
+ *
+ * The [`TSInput`] parameter lets you specify how to read the text. It has the
+ * following three fields:
+ * 1. [`read`]: A function to retrieve a chunk of text at a given byte offset
+ * and (row, column) position. The function should return a pointer to the
+ * text and write its length to the [`bytes_read`] pointer. The parser does
+ * not take ownership of this buffer; it just borrows it until it has
+ * finished reading it. The function should write a zero value to the
+ * [`bytes_read`] pointer to indicate the end of the document.
+ * 2. [`payload`]: An arbitrary pointer that will be passed to each invocation
+ * of the [`read`] function.
+ * 3. [`encoding`]: An indication of how the text is encoded. Either
+ * `TSInputEncodingUTF8` or `TSInputEncodingUTF16`.
+ *
+ * This function returns a syntax tree on success, and `NULL` on failure. There
+ * are four possible reasons for failure:
+ * 1. The parser does not have a language assigned. Check for this using the
+ * [`ts_parser_language`] function.
+ * 2. Parsing was cancelled due to a timeout that was set by an earlier call to
+ * the [`ts_parser_set_timeout_micros`] function. You can resume parsing from
+ * where the parser left out by calling [`ts_parser_parse`] again with the
+ * same arguments. Or you can start parsing from scratch by first calling
+ * [`ts_parser_reset`].
+ * 3. Parsing was cancelled using a cancellation flag that was set by an
+ * earlier call to [`ts_parser_set_cancellation_flag`]. You can resume parsing
+ * from where the parser left out by calling [`ts_parser_parse`] again with
+ * the same arguments.
+ * 4. Parsing was cancelled due to the progress callback returning true. This callback
+ * is passed in [`ts_parser_parse_with_options`] inside the [`TSParseOptions`] struct.
+ *
+ * [`read`]: TSInput::read
+ * [`payload`]: TSInput::payload
+ * [`encoding`]: TSInput::encoding
+ * [`bytes_read`]: TSInput::read
+ */
 public fun ts_parser_parse(
     self: Pointer<TSParser>,
     old_tree: Pointer<TSTree>,
     input: TSInput,
 ): Pointer<TSTree> = `ts_parser_parse$mh`.invokeExact(self, old_tree, input.`$mem`) as MemorySegment
 
+/**
+ *
+ * Use the parser to parse some source code and create a syntax tree, with some options.
+ *
+ * See [`ts_parser_parse`] for more details.
+ *
+ * See [`TSParseOptions`] for more details on the options.
+ */
 public fun ts_parser_parse_with_options(
     self: Pointer<TSParser>,
     old_tree: Pointer<TSTree>,
@@ -37,6 +145,13 @@ public fun ts_parser_parse_with_options(
 ): Pointer<TSTree> =
     `ts_parser_parse_with_options$mh`.invokeExact(self, old_tree, input.`$mem`, parse_options.`$mem`) as MemorySegment
 
+/**
+ *
+ * Use the parser to parse some source code stored in one contiguous buffer.
+ * The first two parameters are the same as in the [`ts_parser_parse`] function
+ * above. The second two parameters indicate the location of the buffer and its
+ * length in bytes.
+ */
 public fun ts_parser_parse_string(
     self: Pointer<TSParser>,
     old_tree: Pointer<TSTree>,
@@ -44,6 +159,13 @@ public fun ts_parser_parse_string(
     length: UInt,
 ): Pointer<TSTree> = `ts_parser_parse_string$mh`.invokeExact(self, old_tree, string, length.toInt()) as MemorySegment
 
+/**
+ *
+ * Use the parser to parse some source code stored in one contiguous buffer with
+ * a given encoding. The first four parameters work the same as in the
+ * [`ts_parser_parse_string`] method above. The final parameter indicates whether
+ * the text is encoded as UTF8 or UTF16.
+ */
 public fun ts_parser_parse_string_encoding(
     self: Pointer<TSParser>,
     old_tree: Pointer<TSTree>,
@@ -58,38 +180,119 @@ public fun ts_parser_parse_string_encoding(
     encoding.value,
 ) as MemorySegment
 
+/**
+ *
+ * Instruct the parser to start the next parse from the beginning.
+ *
+ * If the parser previously failed because of a timeout or a cancellation, then
+ * by default, it will resume where it left off on the next call to
+ * [`ts_parser_parse`] or other parsing functions. If you don't want to resume,
+ * and instead intend to use this parser to parse some other document, you must
+ * call [`ts_parser_reset`] first.
+ */
 public fun ts_parser_reset(self: Pointer<TSParser>): Unit = `ts_parser_reset$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * @deprecated use [`ts_parser_parse_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Set the maximum duration in microseconds that parsing should be allowed to
+ * take before halting.
+ *
+ * If parsing takes longer than this, it will halt early, returning NULL.
+ * See [`ts_parser_parse`] for more information.
+ */
 public fun ts_parser_set_timeout_micros(self: Pointer<TSParser>, timeout_micros: ULong): Unit =
     `ts_parser_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as Unit
 
+/**
+ *
+ * @deprecated use [`ts_parser_parse_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Get the duration in microseconds that parsing is allowed to take.
+ */
 public fun ts_parser_timeout_micros(self: Pointer<TSParser>): ULong =
     (`ts_parser_timeout_micros$mh`.invokeExact(self) as Long).toULong()
 
+/**
+ *
+ * @deprecated use [`ts_parser_parse_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Set the parser's current cancellation flag pointer.
+ *
+ * If a non-null pointer is assigned, then the parser will periodically read
+ * from this pointer during parsing. If it reads a non-zero value, it will
+ * halt early, returning NULL. See [`ts_parser_parse`] for more information.
+ */
 public fun ts_parser_set_cancellation_flag(self: Pointer<TSParser>, flag: Pointer<ULong>): Unit =
     `ts_parser_set_cancellation_flag$mh`.invokeExact(self, flag) as Unit
 
+/**
+ *
+ * @deprecated use [`ts_parser_parse_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Get the parser's current cancellation flag pointer.
+ */
 public fun ts_parser_cancellation_flag(self: Pointer<TSParser>): Pointer<ULong> =
     `ts_parser_cancellation_flag$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Set the logger that a parser should use during parsing.
+ *
+ * The parser does not take ownership over the logger payload. If a logger was
+ * previously assigned, the caller is responsible for releasing any memory
+ * owned by the previous logger.
+ */
 public fun ts_parser_set_logger(self: Pointer<TSParser>, logger: TSLogger): Unit =
     `ts_parser_set_logger$mh`.invokeExact(self, logger.`$mem`) as Unit
 
+/**
+ *
+ * Get the parser's current logger.
+ */
 context(SegmentAllocator)
 public fun ts_parser_logger(self: Pointer<TSParser>): TSLogger =
     TSLogger(`ts_parser_logger$mh`.invokeExact(this@SegmentAllocator, self) as MemorySegment)
 
+/**
+ *
+ * Set the file descriptor to which the parser should write debugging graphs
+ * during parsing. The graphs are formatted in the DOT language. You may want
+ * to pipe these graphs directly to a `dot(1)` process in order to generate
+ * SVG output. You can turn off this logging by passing a negative number.
+ */
 public fun ts_parser_print_dot_graphs(self: Pointer<TSParser>, fd: Int): Unit =
     `ts_parser_print_dot_graphs$mh`.invokeExact(self, fd) as Unit
 
+/**
+ *
+ * Create a shallow copy of the syntax tree. This is very fast.
+ *
+ * You need to copy a syntax tree in order to use it on more than one thread at
+ * a time, as syntax trees are not thread safe.
+ */
 public fun ts_tree_copy(self: Pointer<TSTree>): Pointer<TSTree> = `ts_tree_copy$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Delete the syntax tree, freeing all of the memory that it used.
+ */
 public fun ts_tree_delete(self: Pointer<TSTree>): Unit = `ts_tree_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Get the root node of the syntax tree.
+ */
 context(SegmentAllocator)
 public fun ts_tree_root_node(self: Pointer<TSTree>): TSNode =
     TSNode(`ts_tree_root_node$mh`.invokeExact(this@SegmentAllocator, self) as MemorySegment)
 
+/**
+ *
+ * Get the root node of the syntax tree, but with its position
+ * shifted forward by the given offset.
+ */
 context(SegmentAllocator)
 public fun ts_tree_root_node_with_offset(
     self: Pointer<TSTree>,
@@ -104,75 +307,219 @@ public fun ts_tree_root_node_with_offset(
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the language that was used to parse the syntax tree.
+ */
 public fun ts_tree_language(self: Pointer<TSTree>): Pointer<TSLanguage> =
     `ts_tree_language$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Get the array of included ranges that was used to parse the syntax tree.
+ *
+ * The returned pointer must be freed by the caller.
+ */
 public fun ts_tree_included_ranges(self: Pointer<TSTree>, length: Pointer<UInt>): Pointer<TSRange> =
     `ts_tree_included_ranges$mh`.invokeExact(self, length) as MemorySegment
 
+/**
+ *
+ * Edit the syntax tree to keep it in sync with source code that has been
+ * edited.
+ *
+ * You must describe the edit both in terms of byte offsets and in terms of
+ * (row, column) coordinates.
+ */
 public fun ts_tree_edit(self: Pointer<TSTree>, edit: Pointer<TSInputEdit>): Unit =
     `ts_tree_edit$mh`.invokeExact(self, edit) as Unit
 
+/**
+ *
+ * Compare an old edited syntax tree to a new syntax tree representing the same
+ * document, returning an array of ranges whose syntactic structure has changed.
+ *
+ * For this to work correctly, the old syntax tree must have been edited such
+ * that its ranges match up to the new tree. Generally, you'll want to call
+ * this function right after calling one of the [`ts_parser_parse`] functions.
+ * You need to pass the old tree that was passed to parse, as well as the new
+ * tree that was returned from that function.
+ *
+ * The returned ranges indicate areas where the hierarchical structure of syntax
+ * nodes (from root to leaf) has changed between the old and new trees. Characters
+ * outside these ranges have identical ancestor nodes in both trees.
+ *
+ * Note that the returned ranges may be slightly larger than the exact changed areas,
+ * but Tree-sitter attempts to make them as small as possible.
+ *
+ * The returned array is allocated using `malloc` and the caller is responsible
+ * for freeing it using `free`. The length of the array will be written to the
+ * given `length` pointer.
+ */
 public fun ts_tree_get_changed_ranges(
     old_tree: Pointer<TSTree>,
     new_tree: Pointer<TSTree>,
     length: Pointer<UInt>,
 ): Pointer<TSRange> = `ts_tree_get_changed_ranges$mh`.invokeExact(old_tree, new_tree, length) as MemorySegment
 
+/**
+ *
+ * Write a DOT graph describing the syntax tree to the given file.
+ */
 public fun ts_tree_print_dot_graph(self: Pointer<TSTree>, file_descriptor: Int): Unit =
     `ts_tree_print_dot_graph$mh`.invokeExact(self, file_descriptor) as Unit
 
+/**
+ *
+ * Get the node's type as a null-terminated string.
+ */
 public fun ts_node_type(self: TSNode): Pointer<Byte> = `ts_node_type$mh`.invokeExact(self.`$mem`) as MemorySegment
 
+/**
+ *
+ * Get the node's type as a numerical id.
+ */
 public fun ts_node_symbol(self: TSNode): TSSymbol = (`ts_node_symbol$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
+/**
+ *
+ * Get the node's language.
+ */
 public fun ts_node_language(self: TSNode): Pointer<TSLanguage> =
     `ts_node_language$mh`.invokeExact(self.`$mem`) as MemorySegment
 
+/**
+ *
+ * Get the node's type as it appears in the grammar ignoring aliases as a
+ * null-terminated string.
+ */
 public fun ts_node_grammar_type(self: TSNode): Pointer<Byte> =
     `ts_node_grammar_type$mh`.invokeExact(self.`$mem`) as MemorySegment
 
+/**
+ *
+ * Get the node's type as a numerical id as it appears in the grammar ignoring
+ * aliases. This should be used in [`ts_language_next_state`] instead of
+ * [`ts_node_symbol`].
+ */
 public fun ts_node_grammar_symbol(self: TSNode): TSSymbol =
     (`ts_node_grammar_symbol$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
+/**
+ *
+ * Get the node's start byte.
+ */
 public fun ts_node_start_byte(self: TSNode): UInt = (`ts_node_start_byte$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
+/**
+ *
+ * Get the node's start position in terms of rows and columns.
+ */
 context(SegmentAllocator)
 public fun ts_node_start_point(self: TSNode): TSPoint =
     TSPoint(`ts_node_start_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
+/**
+ *
+ * Get the node's end byte.
+ */
 public fun ts_node_end_byte(self: TSNode): UInt = (`ts_node_end_byte$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
+/**
+ *
+ * Get the node's end position in terms of rows and columns.
+ */
 context(SegmentAllocator)
 public fun ts_node_end_point(self: TSNode): TSPoint =
     TSPoint(`ts_node_end_point$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
-public fun  ts_node_string(self: TSNode): Pointer<Byte> = `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
+/**
+ *
+ * Get an S-expression representing the node as a string.
+ *
+ * This string is allocated with `malloc` and the caller is responsible for
+ * freeing it using `free`.
+ */
+public fun ts_node_string(self: TSNode): Pointer<Byte> = `ts_node_string$mh`.invokeExact(self.`$mem`) as MemorySegment
 
+/**
+ *
+ * Check if the node is null. Functions like [`ts_node_child`] and
+ * [`ts_node_next_sibling`] will return a null node to indicate that no such node
+ * was found.
+ */
 public fun ts_node_is_null(self: TSNode): Boolean = `ts_node_is_null$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if the node is *named*. Named nodes correspond to named rules in the
+ * grammar, whereas *anonymous* nodes correspond to string literals in the
+ * grammar.
+ */
 public fun ts_node_is_named(self: TSNode): Boolean = `ts_node_is_named$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if the node is *missing*. Missing nodes are inserted by the parser in
+ * order to recover from certain kinds of syntax errors.
+ */
 public fun ts_node_is_missing(self: TSNode): Boolean = `ts_node_is_missing$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if the node is *extra*. Extra nodes represent things like comments,
+ * which are not required the grammar, but can appear anywhere.
+ */
 public fun ts_node_is_extra(self: TSNode): Boolean = `ts_node_is_extra$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if a syntax node has been edited.
+ */
 public fun ts_node_has_changes(self: TSNode): Boolean = `ts_node_has_changes$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if the node is a syntax error or contains any syntax errors.
+ */
 public fun ts_node_has_error(self: TSNode): Boolean = `ts_node_has_error$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Check if the node is a syntax error.
+ */
 public fun ts_node_is_error(self: TSNode): Boolean = `ts_node_is_error$mh`.invokeExact(self.`$mem`) as Boolean
 
+/**
+ *
+ * Get this node's parse state.
+ */
 public fun ts_node_parse_state(self: TSNode): TSStateId =
     (`ts_node_parse_state$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
+/**
+ *
+ * Get the parse state after this node.
+ */
 public fun ts_node_next_parse_state(self: TSNode): TSStateId =
     (`ts_node_next_parse_state$mh`.invokeExact(self.`$mem`) as Short).toUShort()
 
+/**
+ *
+ * Get the node's immediate parent.
+ * Prefer [`ts_node_child_with_descendant`] for
+ * iterating over the node's ancestors.
+ */
 context(SegmentAllocator)
 public fun ts_node_parent(self: TSNode): TSNode =
     TSNode(`ts_node_parent$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
+/**
+ *
+ * Get the node that contains `descendant`.
+ *
+ * Note that this can return `descendant` itself.
+ */
 context(SegmentAllocator)
 public fun ts_node_child_with_descendant(self: TSNode, descendant: TSNode): TSNode = TSNode(
     `ts_node_child_with_descendant$mh`.invokeExact(
@@ -182,19 +529,44 @@ public fun ts_node_child_with_descendant(self: TSNode, descendant: TSNode): TSNo
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's child at the given index, where zero represents the first
+ * child.
+ */
 context(SegmentAllocator)
 public fun ts_node_child(self: TSNode, child_index: UInt): TSNode =
     TSNode(`ts_node_child$mh`.invokeExact(this@SegmentAllocator, self.`$mem`, child_index.toInt()) as MemorySegment)
 
+/**
+ *
+ * Get the field name for node's child at the given index, where zero represents
+ * the first child. Returns NULL, if no field is found.
+ */
 public fun ts_node_field_name_for_child(self: TSNode, child_index: UInt): Pointer<Byte> =
     `ts_node_field_name_for_child$mh`.invokeExact(self.`$mem`, child_index.toInt()) as MemorySegment
 
+/**
+ *
+ * Get the field name for node's named child at the given index, where zero
+ * represents the first named child. Returns NULL, if no field is found.
+ */
 public fun ts_node_field_name_for_named_child(self: TSNode, named_child_index: UInt): Pointer<Byte> =
     `ts_node_field_name_for_named_child$mh`.invokeExact(self.`$mem`, named_child_index.toInt()) as MemorySegment
 
+/**
+ *
+ * Get the node's number of children.
+ */
 public fun ts_node_child_count(self: TSNode): UInt =
     (`ts_node_child_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
+/**
+ *
+ * Get the node's *named* child at the given index.
+ *
+ * See also [`ts_node_is_named`].
+ */
 context(SegmentAllocator)
 public fun ts_node_named_child(self: TSNode, child_index: UInt): TSNode = TSNode(
     `ts_node_named_child$mh`.invokeExact(
@@ -204,9 +576,19 @@ public fun ts_node_named_child(self: TSNode, child_index: UInt): TSNode = TSNode
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's number of *named* children.
+ *
+ * See also [`ts_node_is_named`].
+ */
 public fun ts_node_named_child_count(self: TSNode): UInt =
     (`ts_node_named_child_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
+/**
+ *
+ * Get the node's child with the given field name.
+ */
 context(SegmentAllocator)
 public fun ts_node_child_by_field_name(
     self: TSNode,
@@ -221,6 +603,13 @@ public fun ts_node_child_by_field_name(
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's child with the given numerical field id.
+ *
+ * You can convert a field name to an id using the
+ * [`ts_language_field_id_for_name`] function.
+ */
 context(SegmentAllocator)
 public fun ts_node_child_by_field_id(self: TSNode, field_id: TSFieldId): TSNode = TSNode(
     `ts_node_child_by_field_id$mh`.invokeExact(
@@ -230,6 +619,10 @@ public fun ts_node_child_by_field_id(self: TSNode, field_id: TSFieldId): TSNode 
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's next / previous sibling.
+ */
 context(SegmentAllocator)
 public fun ts_node_next_sibling(self: TSNode): TSNode =
     TSNode(`ts_node_next_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
@@ -238,6 +631,10 @@ context(SegmentAllocator)
 public fun ts_node_prev_sibling(self: TSNode): TSNode =
     TSNode(`ts_node_prev_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
+/**
+ *
+ * Get the node's next / previous *named* sibling.
+ */
 context(SegmentAllocator)
 public fun ts_node_next_named_sibling(self: TSNode): TSNode =
     TSNode(`ts_node_next_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
@@ -246,6 +643,10 @@ context(SegmentAllocator)
 public fun ts_node_prev_named_sibling(self: TSNode): TSNode =
     TSNode(`ts_node_prev_named_sibling$mh`.invokeExact(this@SegmentAllocator, self.`$mem`) as MemorySegment)
 
+/**
+ *
+ * Get the node's first child that contains or starts after the given byte offset.
+ */
 context(SegmentAllocator)
 public fun ts_node_first_child_for_byte(self: TSNode, byte: UInt): TSNode = TSNode(
     `ts_node_first_child_for_byte$mh`.invokeExact(
@@ -255,6 +656,10 @@ public fun ts_node_first_child_for_byte(self: TSNode, byte: UInt): TSNode = TSNo
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's first named child that contains or starts after the given byte offset.
+ */
 context(SegmentAllocator)
 public fun ts_node_first_named_child_for_byte(self: TSNode, byte: UInt): TSNode = TSNode(
     `ts_node_first_named_child_for_byte$mh`.invokeExact(
@@ -264,9 +669,18 @@ public fun ts_node_first_named_child_for_byte(self: TSNode, byte: UInt): TSNode 
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the node's number of descendants, including one for the node itself.
+ */
 public fun ts_node_descendant_count(self: TSNode): UInt =
     (`ts_node_descendant_count$mh`.invokeExact(self.`$mem`) as Int).toUInt()
 
+/**
+ *
+ * Get the smallest node within this node that spans the given range of bytes
+ * or (row, column) positions.
+ */
 context(SegmentAllocator)
 public fun ts_node_descendant_for_byte_range(
     self: TSNode,
@@ -295,6 +709,11 @@ public fun ts_node_descendant_for_point_range(
     ) as MemorySegment
 )
 
+/**
+ *
+ * Get the smallest named node within this node that spans the given range of
+ * bytes or (row, column) positions.
+ */
 context(SegmentAllocator)
 public fun ts_node_named_descendant_for_byte_range(
     self: TSNode,
@@ -323,59 +742,194 @@ public fun ts_node_named_descendant_for_point_range(
     ) as MemorySegment
 )
 
+/**
+ *
+ * Edit the node to keep it in-sync with source code that has been edited.
+ *
+ * This function is only rarely needed. When you edit a syntax tree with the
+ * [`ts_tree_edit`] function, all of the nodes that you retrieve from the tree
+ * afterward will already reflect the edit. You only need to use [`ts_node_edit`]
+ * when you have a [`TSNode`] instance that you want to keep and continue to use
+ * after an edit.
+ */
 public fun ts_node_edit(self: Pointer<TSNode>, edit: Pointer<TSInputEdit>): Unit =
     `ts_node_edit$mh`.invokeExact(self, edit) as Unit
 
+/**
+ *
+ * Check if two nodes are identical.
+ */
 public fun ts_node_eq(self: TSNode, other: TSNode): Boolean =
     `ts_node_eq$mh`.invokeExact(self.`$mem`, other.`$mem`) as Boolean
 
+/**
+ *
+ * Create a new tree cursor starting from the given node.
+ *
+ * A tree cursor allows you to walk a syntax tree more efficiently than is
+ * possible using the [`TSNode`] functions. It is a mutable object that is always
+ * on a certain syntax node, and can be moved imperatively to different nodes.
+ *
+ * Note that the given node is considered the root of the cursor,
+ * and the cursor cannot walk outside this node.
+ */
 context(SegmentAllocator)
 public fun ts_tree_cursor_new(node: TSNode): TSTreeCursor =
     TSTreeCursor(`ts_tree_cursor_new$mh`.invokeExact(this@SegmentAllocator, node.`$mem`) as MemorySegment)
 
+/**
+ *
+ * Delete a tree cursor, freeing all of the memory that it used.
+ */
 public fun ts_tree_cursor_delete(self: Pointer<TSTreeCursor>): Unit =
     `ts_tree_cursor_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Re-initialize a tree cursor to start at the original node that the cursor was
+ * constructed with.
+ */
 public fun ts_tree_cursor_reset(self: Pointer<TSTreeCursor>, node: TSNode): Unit =
     `ts_tree_cursor_reset$mh`.invokeExact(self, node.`$mem`) as Unit
 
+/**
+ *
+ * Re-initialize a tree cursor to the same position as another cursor.
+ *
+ * Unlike [`ts_tree_cursor_reset`], this will not lose parent information and
+ * allows reusing already created cursors.
+ */
 public fun ts_tree_cursor_reset_to(dst: Pointer<TSTreeCursor>, src: Pointer<TSTreeCursor>): Unit =
     `ts_tree_cursor_reset_to$mh`.invokeExact(dst, src) as Unit
 
+/**
+ *
+ * Get the tree cursor's current node.
+ */
 context(SegmentAllocator)
 public fun ts_tree_cursor_current_node(self: Pointer<TSTreeCursor>): TSNode =
     TSNode(`ts_tree_cursor_current_node$mh`.invokeExact(this@SegmentAllocator, self) as MemorySegment)
 
+/**
+ *
+ * Get the field name of the tree cursor's current node.
+ *
+ * This returns `NULL` if the current node doesn't have a field.
+ * See also [`ts_node_child_by_field_name`].
+ */
 public fun ts_tree_cursor_current_field_name(self: Pointer<TSTreeCursor>): Pointer<Byte> =
     `ts_tree_cursor_current_field_name$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Get the field id of the tree cursor's current node.
+ *
+ * This returns zero if the current node doesn't have a field.
+ * See also [`ts_node_child_by_field_id`], [`ts_language_field_id_for_name`].
+ */
 public fun ts_tree_cursor_current_field_id(self: Pointer<TSTreeCursor>): TSFieldId =
     (`ts_tree_cursor_current_field_id$mh`.invokeExact(self) as Short).toUShort()
 
+/**
+ *
+ * Move the cursor to the parent of its current node.
+ *
+ * This returns `true` if the cursor successfully moved, and returns `false`
+ * if there was no parent node (the cursor was already on the root node).
+ *
+ * Note that the node the cursor was constructed with is considered the root
+ * of the cursor, and the cursor cannot walk outside this node.
+ */
 public fun ts_tree_cursor_goto_parent(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_parent$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Move the cursor to the next sibling of its current node.
+ *
+ * This returns `true` if the cursor successfully moved, and returns `false`
+ * if there was no next sibling node.
+ *
+ * Note that the node the cursor was constructed with is considered the root
+ * of the cursor, and the cursor cannot walk outside this node.
+ */
 public fun ts_tree_cursor_goto_next_sibling(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_next_sibling$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Move the cursor to the previous sibling of its current node.
+ *
+ * This returns `true` if the cursor successfully moved, and returns `false` if
+ * there was no previous sibling node.
+ *
+ * Note, that this function may be slower than
+ * [`ts_tree_cursor_goto_next_sibling`] due to how node positions are stored. In
+ * the worst case, this will need to iterate through all the children up to the
+ * previous sibling node to recalculate its position. Also note that the node the cursor
+ * was constructed with is considered the root of the cursor, and the cursor cannot
+ * walk outside this node.
+ */
 public fun ts_tree_cursor_goto_previous_sibling(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_previous_sibling$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Move the cursor to the first child of its current node.
+ *
+ * This returns `true` if the cursor successfully moved, and returns `false`
+ * if there were no children.
+ */
 public fun ts_tree_cursor_goto_first_child(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_first_child$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Move the cursor to the last child of its current node.
+ *
+ * This returns `true` if the cursor successfully moved, and returns `false` if
+ * there were no children.
+ *
+ * Note that this function may be slower than [`ts_tree_cursor_goto_first_child`]
+ * because it needs to iterate through all the children to compute the child's
+ * position.
+ */
 public fun ts_tree_cursor_goto_last_child(self: Pointer<TSTreeCursor>): Boolean =
     `ts_tree_cursor_goto_last_child$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Move the cursor to the node that is the nth descendant of
+ * the original node that the cursor was constructed with, where
+ * zero represents the original node itself.
+ */
 public fun ts_tree_cursor_goto_descendant(self: Pointer<TSTreeCursor>, goal_descendant_index: UInt): Unit =
     `ts_tree_cursor_goto_descendant$mh`.invokeExact(self, goal_descendant_index.toInt()) as Unit
 
+/**
+ *
+ * Get the index of the cursor's current node out of all of the
+ * descendants of the original node that the cursor was constructed with.
+ */
 public fun ts_tree_cursor_current_descendant_index(self: Pointer<TSTreeCursor>): UInt =
     (`ts_tree_cursor_current_descendant_index$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the depth of the cursor's current node relative to the original
+ * node that the cursor was constructed with.
+ */
 public fun ts_tree_cursor_current_depth(self: Pointer<TSTreeCursor>): UInt =
     (`ts_tree_cursor_current_depth$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Move the cursor to the first child of its current node that contains or starts after
+ * the given byte offset or point.
+ *
+ * This returns the index of the child node if one was found, and returns -1
+ * if no such child was found.
+ */
 public fun ts_tree_cursor_goto_first_child_for_byte(self: Pointer<TSTreeCursor>, goal_byte: UInt): Long =
     `ts_tree_cursor_goto_first_child_for_byte$mh`.invokeExact(self, goal_byte.toInt()) as Long
 
@@ -386,6 +940,18 @@ context(SegmentAllocator)
 public fun ts_tree_cursor_copy(cursor: Pointer<TSTreeCursor>): TSTreeCursor =
     TSTreeCursor(`ts_tree_cursor_copy$mh`.invokeExact(this@SegmentAllocator, cursor) as MemorySegment)
 
+/**
+ *
+ * Create a new query from a string containing one or more S-expression
+ * patterns. The query is associated with a particular language, and can
+ * only be run on syntax nodes parsed with that language.
+ *
+ * If all of the given patterns are valid, this returns a [`TSQuery`].
+ * If a pattern is invalid, this returns `NULL`, and provides two pieces
+ * of information about the problem:
+ * 1. The byte offset of the error is written to the `error_offset` parameter.
+ * 2. The type of error is written to the `error_type` parameter.
+ */
 public fun ts_query_new(
     language: Pointer<TSLanguage>,
     source: Pointer<Byte>,
@@ -395,8 +961,16 @@ public fun ts_query_new(
 ): Pointer<TSQuery> =
     `ts_query_new$mh`.invokeExact(language, source, source_len.toInt(), error_offset, error_type) as MemorySegment
 
+/**
+ *
+ * Delete a query, freeing all of the memory that it used.
+ */
 public fun ts_query_delete(self: Pointer<TSQuery>): Unit = `ts_query_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Get the number of patterns, captures, or string literals in the query.
+ */
 public fun ts_query_pattern_count(self: Pointer<TSQuery>): UInt =
     (`ts_query_pattern_count$mh`.invokeExact(self) as Int).toUInt()
 
@@ -406,12 +980,43 @@ public fun ts_query_capture_count(self: Pointer<TSQuery>): UInt =
 public fun ts_query_string_count(self: Pointer<TSQuery>): UInt =
     (`ts_query_string_count$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the byte offset where the given pattern starts in the query's source.
+ *
+ * This can be useful when combining queries by concatenating their source
+ * code strings.
+ */
 public fun ts_query_start_byte_for_pattern(self: Pointer<TSQuery>, pattern_index: UInt): UInt =
     (`ts_query_start_byte_for_pattern$mh`.invokeExact(self, pattern_index.toInt()) as Int).toUInt()
 
+/**
+ *
+ * Get the byte offset where the given pattern ends in the query's source.
+ *
+ * This can be useful when combining queries by concatenating their source
+ * code strings.
+ */
 public fun ts_query_end_byte_for_pattern(self: Pointer<TSQuery>, pattern_index: UInt): UInt =
     (`ts_query_end_byte_for_pattern$mh`.invokeExact(self, pattern_index.toInt()) as Int).toUInt()
 
+/**
+ *
+ * Get all of the predicates for the given pattern in the query.
+ *
+ * The predicates are represented as a single array of steps. There are three
+ * types of steps in this array, which correspond to the three legal values for
+ * the `type` field:
+ * - `TSQueryPredicateStepTypeCapture` - Steps with this type represent names
+ * of captures. Their `value_id` can be used with the
+ * [`ts_query_capture_name_for_id`] function to obtain the name of the capture.
+ * - `TSQueryPredicateStepTypeString` - Steps with this type represent literal
+ * strings. Their `value_id` can be used with the
+ * [`ts_query_string_value_for_id`] function to obtain their string value.
+ * - `TSQueryPredicateStepTypeDone` - Steps with this type are *sentinels*
+ * that represent the end of an individual predicate. If a pattern has two
+ * predicates, then there will be two steps with this `type` in the array.
+ */
 public fun ts_query_predicates_for_pattern(
     self: Pointer<TSQuery>,
     pattern_index: UInt,
@@ -419,21 +1024,47 @@ public fun ts_query_predicates_for_pattern(
 ): Pointer<TSQueryPredicateStep> =
     `ts_query_predicates_for_pattern$mh`.invokeExact(self, pattern_index.toInt(), step_count) as MemorySegment
 
+/**
+ * Check if the given pattern in the query has a single root node.
+ */
 public fun ts_query_is_pattern_rooted(self: Pointer<TSQuery>, pattern_index: UInt): Boolean =
     `ts_query_is_pattern_rooted$mh`.invokeExact(self, pattern_index.toInt()) as Boolean
 
+/**
+ * Check if the given pattern in the query is 'non local'.
+ *
+ * A non-local pattern has multiple root nodes and can match within a
+ * repeating sequence of nodes, as specified by the grammar. Non-local
+ * patterns disable certain optimizations that would otherwise be possible
+ * when executing a query on a specific range of a syntax tree.
+ */
 public fun ts_query_is_pattern_non_local(self: Pointer<TSQuery>, pattern_index: UInt): Boolean =
     `ts_query_is_pattern_non_local$mh`.invokeExact(self, pattern_index.toInt()) as Boolean
 
+/**
+ * Check if a given pattern is guaranteed to match once a given step is reached.
+ * The step is specified by its byte offset in the query's source code.
+ */
 public fun ts_query_is_pattern_guaranteed_at_step(self: Pointer<TSQuery>, byte_offset: UInt): Boolean =
     `ts_query_is_pattern_guaranteed_at_step$mh`.invokeExact(self, byte_offset.toInt()) as Boolean
 
+/**
+ *
+ * Get the name and length of one of the query's captures, or one of the
+ * query's string literals. Each capture and string is associated with a
+ * numeric id based on the order that it appeared in the query's source.
+ */
 public fun ts_query_capture_name_for_id(
     self: Pointer<TSQuery>,
     index: UInt,
     length: Pointer<UInt>,
 ): Pointer<Byte> = `ts_query_capture_name_for_id$mh`.invokeExact(self, index.toInt(), length) as MemorySegment
 
+/**
+ *
+ * Get the quantifier of the query's captures. Each capture is * associated
+ * with a numeric id based on the order that it appeared in the query's source.
+ */
 public fun ts_query_capture_quantifier_for_id(
     self: Pointer<TSQuery>,
     pattern_index: UInt,
@@ -452,26 +1083,76 @@ public fun ts_query_string_value_for_id(
     length: Pointer<UInt>,
 ): Pointer<Byte> = `ts_query_string_value_for_id$mh`.invokeExact(self, index.toInt(), length) as MemorySegment
 
+/**
+ *
+ * Disable a certain capture within a query.
+ *
+ * This prevents the capture from being returned in matches, and also avoids
+ * any resource usage associated with recording the capture. Currently, there
+ * is no way to undo this.
+ */
 public fun ts_query_disable_capture(
     self: Pointer<TSQuery>,
     name: Pointer<Byte>,
     length: UInt,
 ): Unit = `ts_query_disable_capture$mh`.invokeExact(self, name, length.toInt()) as Unit
 
+/**
+ *
+ * Disable a certain pattern within a query.
+ *
+ * This prevents the pattern from matching and removes most of the overhead
+ * associated with the pattern. Currently, there is no way to undo this.
+ */
 public fun ts_query_disable_pattern(self: Pointer<TSQuery>, pattern_index: UInt): Unit =
     `ts_query_disable_pattern$mh`.invokeExact(self, pattern_index.toInt()) as Unit
 
+/**
+ *
+ * Create a new cursor for executing a given query.
+ *
+ * The cursor stores the state that is needed to iteratively search
+ * for matches. To use the query cursor, first call [`ts_query_cursor_exec`]
+ * to start running a given query on a given syntax node. Then, there are
+ * two options for consuming the results of the query:
+ * 1. Repeatedly call [`ts_query_cursor_next_match`] to iterate over all of the
+ * *matches* in the order that they were found. Each match contains the
+ * index of the pattern that matched, and an array of captures. Because
+ * multiple patterns can match the same set of nodes, one match may contain
+ * captures that appear *before* some of the captures from a previous match.
+ * 2. Repeatedly call [`ts_query_cursor_next_capture`] to iterate over all of the
+ * individual *captures* in the order that they appear. This is useful if
+ * don't care about which pattern matched, and just want a single ordered
+ * sequence of captures.
+ *
+ * If you don't care about consuming all of the results, you can stop calling
+ * [`ts_query_cursor_next_match`] or [`ts_query_cursor_next_capture`] at any point.
+ * You can then start executing another query on another node by calling
+ * [`ts_query_cursor_exec`] again.
+ */
 public fun ts_query_cursor_new(): Pointer<TSQueryCursor> = `ts_query_cursor_new$mh`.invokeExact() as MemorySegment
 
+/**
+ *
+ * Delete a query cursor, freeing all of the memory that it used.
+ */
 public fun ts_query_cursor_delete(self: Pointer<TSQueryCursor>): Unit =
     `ts_query_cursor_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Start running a given query on a given node.
+ */
 public fun ts_query_cursor_exec(
     self: Pointer<TSQueryCursor>,
     query: Pointer<TSQuery>,
     node: TSNode,
 ): Unit = `ts_query_cursor_exec$mh`.invokeExact(self, query, node.`$mem`) as Unit
 
+/**
+ *
+ * Start running a given query on a given node, with some options.
+ */
 public fun ts_query_cursor_exec_with_options(
     self: Pointer<TSQueryCursor>,
     query: Pointer<TSQuery>,
@@ -479,6 +1160,18 @@ public fun ts_query_cursor_exec_with_options(
     query_options: Pointer<TSQueryCursorOptions>,
 ): Unit = `ts_query_cursor_exec_with_options$mh`.invokeExact(self, query, node.`$mem`, query_options) as Unit
 
+/**
+ *
+ * Manage the maximum number of in-progress matches allowed by this query
+ * cursor.
+ *
+ * Query cursors have an optional maximum capacity for storing lists of
+ * in-progress captures. If this capacity is exceeded, then the
+ * earliest-starting match will silently be dropped to make room for further
+ * matches. This maximum capacity is optional — by default, query cursors allow
+ * any number of pending matches, dynamically allocating new space for them as
+ * needed as the query is executed.
+ */
 public fun ts_query_cursor_did_exceed_match_limit(self: Pointer<TSQueryCursor>): Boolean =
     `ts_query_cursor_did_exceed_match_limit$mh`.invokeExact(self) as Boolean
 
@@ -488,50 +1181,150 @@ public fun ts_query_cursor_match_limit(self: Pointer<TSQueryCursor>): UInt =
 public fun ts_query_cursor_set_match_limit(self: Pointer<TSQueryCursor>, limit: UInt): Unit =
     `ts_query_cursor_set_match_limit$mh`.invokeExact(self, limit.toInt()) as Unit
 
+/**
+ *
+ * @deprecated use [`ts_query_cursor_exec_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Set the maximum duration in microseconds that query execution should be allowed to
+ * take before halting.
+ *
+ * If query execution takes longer than this, it will halt early, returning NULL.
+ * See [`ts_query_cursor_next_match`] or [`ts_query_cursor_next_capture`] for more information.
+ */
 public fun ts_query_cursor_set_timeout_micros(self: Pointer<TSQueryCursor>, timeout_micros: ULong): Unit =
     `ts_query_cursor_set_timeout_micros$mh`.invokeExact(self, timeout_micros.toLong()) as Unit
 
+/**
+ *
+ * @deprecated use [`ts_query_cursor_exec_with_options`] and pass in a callback instead, this will be removed in 0.26.
+ *
+ * Get the duration in microseconds that query execution is allowed to take.
+ *
+ * This is set via [`ts_query_cursor_set_timeout_micros`].
+ */
 public fun ts_query_cursor_timeout_micros(self: Pointer<TSQueryCursor>): ULong =
     (`ts_query_cursor_timeout_micros$mh`.invokeExact(self) as Long).toULong()
 
+/**
+ *
+ * Set the range of bytes in which the query will be executed.
+ *
+ * The query cursor will return matches that intersect with the given point range.
+ * This means that a match may be returned even if some of its captures fall
+ * outside the specified range, as long as at least part of the match
+ * overlaps with the range.
+ *
+ * For example, if a query pattern matches a node that spans a larger area
+ * than the specified range, but part of that node intersects with the range,
+ * the entire match will be returned.
+ *
+ * This will return `false` if the start byte is greater than the end byte, otherwise
+ * it will return `true`.
+ */
 public fun ts_query_cursor_set_byte_range(
     self: Pointer<TSQueryCursor>,
     start_byte: UInt,
     end_byte: UInt,
 ): Boolean = `ts_query_cursor_set_byte_range$mh`.invokeExact(self, start_byte.toInt(), end_byte.toInt()) as Boolean
 
+/**
+ *
+ * Set the range of (row, column) positions in which the query will be executed.
+ *
+ * The query cursor will return matches that intersect with the given point range.
+ * This means that a match may be returned even if some of its captures fall
+ * outside the specified range, as long as at least part of the match
+ * overlaps with the range.
+ *
+ * For example, if a query pattern matches a node that spans a larger area
+ * than the specified range, but part of that node intersects with the range,
+ * the entire match will be returned.
+ *
+ * This will return `false` if the start point is greater than the end point, otherwise
+ * it will return `true`.
+ */
 public fun ts_query_cursor_set_point_range(
     self: Pointer<TSQueryCursor>,
     start_point: TSPoint,
     end_point: TSPoint,
 ): Boolean = `ts_query_cursor_set_point_range$mh`.invokeExact(self, start_point.`$mem`, end_point.`$mem`) as Boolean
 
+/**
+ *
+ * Advance to the next match of the currently running query.
+ *
+ * If there is a match, write it to `*match` and return `true`.
+ * Otherwise, return `false`.
+ */
 public fun ts_query_cursor_next_match(self: Pointer<TSQueryCursor>, match: Pointer<TSQueryMatch>): Boolean =
     `ts_query_cursor_next_match$mh`.invokeExact(self, match) as Boolean
 
 public fun ts_query_cursor_remove_match(self: Pointer<TSQueryCursor>, match_id: UInt): Unit =
     `ts_query_cursor_remove_match$mh`.invokeExact(self, match_id.toInt()) as Unit
 
+/**
+ *
+ * Advance to the next capture of the currently running query.
+ *
+ * If there is a capture, write its match to `*match` and its index within
+ * the match's capture list to `*capture_index`. Otherwise, return `false`.
+ */
 public fun ts_query_cursor_next_capture(
     self: Pointer<TSQueryCursor>,
     match: Pointer<TSQueryMatch>,
     capture_index: Pointer<UInt>,
 ): Boolean = `ts_query_cursor_next_capture$mh`.invokeExact(self, match, capture_index) as Boolean
 
+/**
+ *
+ * Set the maximum start depth for a query cursor.
+ *
+ * This prevents cursors from exploring children nodes at a certain depth.
+ * Note if a pattern includes many children, then they will still be checked.
+ *
+ * The zero max start depth value can be used as a special behavior and
+ * it helps to destructure a subtree by staying on a node and using captures
+ * for interested parts. Note that the zero max start depth only limit a search
+ * depth for a pattern's root node but other nodes that are parts of the pattern
+ * may be searched at any depth what defined by the pattern structure.
+ *
+ * Set to `UINT32_MAX` to remove the maximum start depth.
+ */
 public fun ts_query_cursor_set_max_start_depth(self: Pointer<TSQueryCursor>, max_start_depth: UInt): Unit =
     `ts_query_cursor_set_max_start_depth$mh`.invokeExact(self, max_start_depth.toInt()) as Unit
 
+/**
+ *
+ * Get another reference to the given language.
+ */
 public fun ts_language_copy(self: Pointer<TSLanguage>): Pointer<TSLanguage> =
     `ts_language_copy$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Free any dynamically-allocated resources for this language, if
+ * this is the last reference.
+ */
 public fun ts_language_delete(self: Pointer<TSLanguage>): Unit = `ts_language_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Get the number of distinct node types in the language.
+ */
 public fun ts_language_symbol_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_symbol_count$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the number of valid states in this language.
+ */
 public fun ts_language_state_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_state_count$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the numerical id for the given node type string.
+ */
 public fun ts_language_symbol_for_name(
     self: Pointer<TSLanguage>,
     string: Pointer<Byte>,
@@ -540,75 +1333,197 @@ public fun ts_language_symbol_for_name(
 ): TSSymbol =
     (`ts_language_symbol_for_name$mh`.invokeExact(self, string, length.toInt(), is_named) as Short).toUShort()
 
+/**
+ *
+ * Get the number of distinct field names in the language.
+ */
 public fun ts_language_field_count(self: Pointer<TSLanguage>): UInt =
     (`ts_language_field_count$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the field name string for the given numerical id.
+ */
 public fun ts_language_field_name_for_id(self: Pointer<TSLanguage>, id: TSFieldId): Pointer<Byte> =
     `ts_language_field_name_for_id$mh`.invokeExact(self, id.toShort()) as MemorySegment
 
+/**
+ *
+ * Get the numerical id for the given field name string.
+ */
 public fun ts_language_field_id_for_name(
     self: Pointer<TSLanguage>,
     name: Pointer<Byte>,
     name_length: UInt,
 ): TSFieldId = (`ts_language_field_id_for_name$mh`.invokeExact(self, name, name_length.toInt()) as Short).toUShort()
 
+/**
+ *
+ * Get a list of all supertype symbols for the language.
+ */
 public fun ts_language_supertypes(self: Pointer<TSLanguage>, length: Pointer<UInt>): Pointer<TSSymbol> =
     `ts_language_supertypes$mh`.invokeExact(self, length) as MemorySegment
 
+/**
+ *
+ * Get a list of all subtype symbol ids for a given supertype symbol.
+ *
+ * See [`ts_language_supertypes`] for fetching all supertype symbols.
+ */
 public fun ts_language_subtypes(
     self: Pointer<TSLanguage>,
     supertype: TSSymbol,
     length: Pointer<UInt>,
 ): Pointer<TSSymbol> = `ts_language_subtypes$mh`.invokeExact(self, supertype.toShort(), length) as MemorySegment
 
+/**
+ *
+ * Get a node type string for the given numerical id.
+ */
 public fun ts_language_symbol_name(self: Pointer<TSLanguage>, symbol: TSSymbol): Pointer<Byte> =
     `ts_language_symbol_name$mh`.invokeExact(self, symbol.toShort()) as MemorySegment
 
+/**
+ *
+ * Check whether the given node type id belongs to named nodes, anonymous nodes,
+ * or a hidden nodes.
+ *
+ * See also [`ts_node_is_named`]. Hidden nodes are never returned from the API.
+ */
 public fun ts_language_symbol_type(self: Pointer<TSLanguage>, symbol: TSSymbol): TSSymbolType =
     TSSymbolType.fromInt(`ts_language_symbol_type$mh`.invokeExact(self, symbol.toShort()) as Int)
 
+/**
+ *
+ * @deprecated use [`ts_language_abi_version`] instead, this will be removed in 0.26.
+ *
+ * Get the ABI version number for this language. This version number is used
+ * to ensure that languages were generated by a compatible version of
+ * Tree-sitter.
+ *
+ * See also [`ts_parser_set_language`].
+ */
 public fun ts_language_version(self: Pointer<TSLanguage>): UInt =
     (`ts_language_version$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the ABI version number for this language. This version number is used
+ * to ensure that languages were generated by a compatible version of
+ * Tree-sitter.
+ *
+ * See also [`ts_parser_set_language`].
+ */
 public fun ts_language_abi_version(self: Pointer<TSLanguage>): UInt =
     (`ts_language_abi_version$mh`.invokeExact(self) as Int).toUInt()
 
+/**
+ *
+ * Get the metadata for this language. This information is generated by the
+ * CLI, and relies on the language author providing the correct metadata in
+ * the language's `tree-sitter.json` file.
+ *
+ * See also [`TSMetadata`].
+ */
 public fun ts_language_metadata(self: Pointer<TSLanguage>): Pointer<TSLanguageMetadata> =
     `ts_language_metadata$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Get the next parse state. Combine this with lookahead iterators to generate
+ * completion suggestions or valid symbols in error nodes. Use
+ * [`ts_node_grammar_symbol`] for valid symbols.
+ */
 public fun ts_language_next_state(
     self: Pointer<TSLanguage>,
     state: TSStateId,
     symbol: TSSymbol,
 ): TSStateId = (`ts_language_next_state$mh`.invokeExact(self, state.toShort(), symbol.toShort()) as Short).toUShort()
 
+/**
+ *
+ * Get the name of this language. This returns `NULL` in older parsers.
+ */
 public fun ts_language_name(self: Pointer<TSLanguage>): Pointer<Byte> =
     `ts_language_name$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Create a new lookahead iterator for the given language and parse state.
+ *
+ * This returns `NULL` if state is invalid for the language.
+ *
+ * Repeatedly using [`ts_lookahead_iterator_next`] and
+ * [`ts_lookahead_iterator_current_symbol`] will generate valid symbols in the
+ * given parse state. Newly created lookahead iterators will contain the `ERROR`
+ * symbol.
+ *
+ * Lookahead iterators can be useful to generate suggestions and improve syntax
+ * error diagnostics. To get symbols valid in an ERROR node, use the lookahead
+ * iterator on its first leaf node state. For `MISSING` nodes, a lookahead
+ * iterator created on the previous non-extra leaf node may be appropriate.
+ */
 public fun ts_lookahead_iterator_new(self: Pointer<TSLanguage>, state: TSStateId): Pointer<TSLookaheadIterator> =
     `ts_lookahead_iterator_new$mh`.invokeExact(self, state.toShort()) as MemorySegment
 
+/**
+ *
+ * Delete a lookahead iterator freeing all the memory used.
+ */
 public fun ts_lookahead_iterator_delete(self: Pointer<TSLookaheadIterator>): Unit =
     `ts_lookahead_iterator_delete$mh`.invokeExact(self) as Unit
 
+/**
+ *
+ * Reset the lookahead iterator to another state.
+ *
+ * This returns `true` if the iterator was reset to the given state and `false`
+ * otherwise.
+ */
 public fun ts_lookahead_iterator_reset_state(self: Pointer<TSLookaheadIterator>, state: TSStateId): Boolean =
     `ts_lookahead_iterator_reset_state$mh`.invokeExact(self, state.toShort()) as Boolean
 
+/**
+ *
+ * Reset the lookahead iterator.
+ *
+ * This returns `true` if the language was set successfully and `false`
+ * otherwise.
+ */
 public fun ts_lookahead_iterator_reset(
     self: Pointer<TSLookaheadIterator>,
     language: Pointer<TSLanguage>,
     state: TSStateId,
 ): Boolean = `ts_lookahead_iterator_reset$mh`.invokeExact(self, language, state.toShort()) as Boolean
 
+/**
+ *
+ * Get the current language of the lookahead iterator.
+ */
 public fun ts_lookahead_iterator_language(self: Pointer<TSLookaheadIterator>): Pointer<TSLanguage> =
     `ts_lookahead_iterator_language$mh`.invokeExact(self) as MemorySegment
 
+/**
+ *
+ * Advance the lookahead iterator to the next symbol.
+ *
+ * This returns `true` if there is a new symbol and `false` otherwise.
+ */
 public fun ts_lookahead_iterator_next(self: Pointer<TSLookaheadIterator>): Boolean =
     `ts_lookahead_iterator_next$mh`.invokeExact(self) as Boolean
 
+/**
+ *
+ * Get the current symbol of the lookahead iterator;
+ */
 public fun ts_lookahead_iterator_current_symbol(self: Pointer<TSLookaheadIterator>): TSSymbol =
     (`ts_lookahead_iterator_current_symbol$mh`.invokeExact(self) as Short).toUShort()
 
+/**
+ *
+ * Get the current symbol type of the lookahead iterator as a null terminated
+ * string.
+ */
 public fun ts_lookahead_iterator_current_symbol_name(self: Pointer<TSLookaheadIterator>): Pointer<Byte> =
     `ts_lookahead_iterator_current_symbol_name$mh`.invokeExact(self) as MemorySegment
 

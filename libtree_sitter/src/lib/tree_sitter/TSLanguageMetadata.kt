@@ -4,6 +4,15 @@ package lib.tree_sitter
 import java.lang.foreign.*
 import java.lang.invoke.VarHandle
 
+/**
+ *
+ * The metadata associated with a language.
+ *
+ * Currently, this metadata can be used to check the [Semantic Version](https://semver.org/)
+ * of the language. This version information should be used to signal if a given parser might
+ * be incompatible with existing queries when upgrading between major versions, or minor versions
+ * if it's in zerover.
+ */
 @JvmInline
 public value class TSLanguageMetadata(
     public val `$mem`: MemorySegment,

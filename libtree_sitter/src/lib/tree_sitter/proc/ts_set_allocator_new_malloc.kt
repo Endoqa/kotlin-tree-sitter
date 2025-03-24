@@ -8,6 +8,23 @@ import java.lang.foreign.*
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
 
+/**
+ *
+ * Set the allocation functions used by the library.
+ *
+ * By default, Tree-sitter uses the standard libc allocation functions,
+ * but aborts the process when an allocation fails. This function lets
+ * you supply alternative allocation functions at runtime.
+ *
+ * If you pass `NULL` for any parameter, Tree-sitter will switch back to
+ * its default implementation of that function.
+ *
+ * If you call this function after the library has already been used, then
+ * you must ensure that either:
+ * 1. All the existing objects have been freed.
+ * 2. The new allocator shares its state with the old one, so it is capable
+ * of freeing memory that was allocated by the old allocator.
+ */
 public fun interface ts_set_allocator_new_malloc {
     @CFunctionInvoke
     public fun invoke(`$p0`: ULong): Pointer<Unit>

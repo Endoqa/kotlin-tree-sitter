@@ -242,6 +242,10 @@ public class Node(
         return ts_node_eq(this.node, other.node)
     }
 
+    public fun into() : TSNode {
+        return node
+    }
+
     public companion object {
         /**
          * Create a node with its lifecycle bind to a separate [Node.owner]
@@ -252,14 +256,25 @@ public class Node(
          * @return A [Node] with its own lifecycle.
          */
         public fun from(action: Arena.() -> TSNode): Node? {
-            return managedMemory {
-                val node = action()
-                if (ts_node_is_null(node)) {
-                    this.close()
-                    null
-                } else {
-                    Node(node, this)
+            val arena = Arena.ofShared()
+
+            try {
+                with(arena) {
+                    val node = action()
+                    return if (ts_node_is_null(node)) {
+                        this.close()
+                        null
+                    } else {
+                        val n = Node(node, this)
+                        cleaner(n) {
+                            this.close()
+                        }
+                        n
+                    }
                 }
+            } catch (e: Throwable) {
+                arena.close()
+                throw e
             }
         }
     }

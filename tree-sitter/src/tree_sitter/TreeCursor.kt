@@ -5,7 +5,7 @@ import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 
 public class TreeCursor(
-    public val raw: Pointer<TSTreeCursor>,
+    internal val raw: Pointer<TSTreeCursor>,
     public val owner: Arena? = null // for auto
 ) : Drop {
 
@@ -78,6 +78,10 @@ public class TreeCursor(
 
     public override fun drop() {
         ts_tree_cursor_delete(raw)
+    }
+
+    public fun into(): Pointer<TSTreeCursor> {
+        return raw
     }
 
 }
